@@ -1,0 +1,55 @@
+# phase-mirror-agent — Docker Compose deployment (ADR-009 §2.2).
+#
+#   docker compose -f deploy/compose.yaml up -d
+#
+# The agent runs as a non-root user, persists its audit WAL on the `pm-state`
+# named volume, and exits gracefully on stop (STOPSIGNAL SIGTERM -> ADR-007 drain).
+#
+# Operator keys: drop a 0600 file `config/keys/operator.keys` (see
+# config/keys/operator.keys.example and scripts/gen-operator-key.sh) before
+# starting; the file is mounted read-only.
+
+services:
+  phase-mirror-agent:
+    build:
+      context: ../..
+      dockerfile: packages/phase-mirror-agent/Dockerfile
+    image: phase-mirror-agent:1.0.0
+    container_name: phase-mirror-agent
+    restart: unless-stopped
+    stop_grace_period: 15s
+    ports:
+      - "8080:8080"   # HTTP API + /health + /ready + /metrics
+      - "3030:3030"   # operator WebSocket broadcast
+    environment:
+      PHASE_MIRROR_ENV: "production"
+      PHASE_MIRROR_STATE_DIR: "/var/lib/phase-mirror/state"
+      PHASE_MIRROR_LOG_FORMAT: "json"
+      PHASE_MIRROR_LOG_LEVEL: "info"
+      PHASE_MIRROR_CORS_ORIGINS: "http://localhost:5173,http://localhost:3000"
+      PHASE_MIRROR_OPERATOR_KEYS_FILE: "/config/keys/operator.keys"
+      # Plain HTTP is explicit here so the image boots out of the box. For TLS,
+      # drop a cert/key under ./certs, mount them below, remove NO_TLS, and set:
+      #   PHASE_MIRROR_TLS_CERT: "/certs/tls.crt"
+      #   PHASE_MIRROR_TLS_KEY:  "/certs/tls.key"
+      # ...then publish 8443 and switch the healthcheck to https.
+      PHASE_MIRROR_NO_TLS: "true"
+    volumes:
+      - pm-state:/var/lib/phase-mirror
+      - ./config/keys:/config/keys:ro
+      # TLS material (uncomment when enabling TLS):
+      # - ./certs:/certs:ro
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/ready"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+volumes:
+  pm-state:

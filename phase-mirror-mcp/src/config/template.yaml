@@ -1,0 +1,22 @@
+# Runtime Configuration Template
+
+# TLS Settings
+tls:
+  enabled: true
+  cert_path: "/path/to/cert.pem"
+  key_path: "/path/to/key.pem"
+
+# Rate Limiting Settings
+rate_limit:
+  requests_per_minute: 1000
+  burst_capacity: 200
+
+# Authentication Settings
+auth:
+  token_secret: "CHANGE_ME_TO_SECURE_RANDOM_STRING"
+  token_expiration_seconds: 3600
+
+# Service Endpoints
+endpoints:
+  health_check: "/health"
+  metrics: "/metrics"

@@ -1,0 +1,85 @@
+# Default values for phase-mirror-agent.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/your-org/phase-mirror-agent
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+# Operator secret key (Ed25519 private key in PEM format, base64 encoded)
+# Provide this via '--set secrets.operatorKey="$(base64 -w0 key.pem)"' or a values override
+secrets:
+  operatorKey: ""   # REQUIRED – will fail if empty; use a secure mechanism
+
+config:
+  logLevel: "info"
+  jsonLogs: "true"
+  port: "8080"
+  wsPort: "3030"
+  # Semantic regime guard epsilon (0.0–1.0)
+  semanticEpsilon: "0.3"
+  # Ethereum RPC URL for Jubilee Bridge anchoring (optional)
+  ethRpcUrl: ""
+  # Anchor contract address (if anchoring is enabled)
+  anchorContractAddress: ""
+
+# Persistent storage for the audit WAL (ADR‑007)
+persistence:
+  enabled: true
+  storageClass: ""   # uses default if empty
+  size: 10Gi
+
+service:
+  type: ClusterIP
+  port: 8080
+  wsPort: 3030
+
+serviceAccount:
+  create: true
+  annotations: {}
+
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations: {}
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: agent.phase-mirror.example.com
+      paths:
+        - path: /api
+          pathType: Prefix
+          backendPort: 8080
+        - path: /audit
+          pathType: Prefix
+          backendPort: 8080
+        - path: /ws
+          pathType: Prefix
+          backendPort: 3030
+  tls:
+    - secretName: phase-mirror-agent-tls
+      hosts:
+        - agent.phase-mirror.example.com
+
+networkPolicy:
+  enabled: true
+  ingressControllerNamespace: ingress-nginx
+  monitoringNamespace: monitoring
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "250m"
+  limits:
+    memory: "1Gi"
+    cpu: "1000m"
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

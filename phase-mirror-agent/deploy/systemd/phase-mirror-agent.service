@@ -1,0 +1,52 @@
+# phase-mirror-agent — systemd unit (ADR-009 §2.3).
+#
+# Install:
+#   sudo cp deploy/systemd/phase-mirror-agent.service /etc/systemd/system/
+#   sudo useradd --system --home /var/lib/phase-mirror --shell /usr/sbin/nologin phase-mirror
+#   sudo install -d -o phase-mirror -g phase-mirror /var/lib/phase-mirror
+#   sudo install -d -m 0700 -o root -g root /etc/phase-mirror
+#   sudo install -m 0600 -o root -g root deploy/.env.example /etc/phase-mirror/phase-mirror-agent.env
+#   # set PHASE_MIRROR_OPERATOR_KEYS_FILE=/etc/phase-mirror/operator.keys in the env file
+#   sudo systemctl daemon-reload && sudo systemctl enable --now phase-mirror-agent
+#
+# The env file is read with EnvironmentFile; secrets live there at 0600.
+# NoNewPrivileges + ProtectSystem=strict keep the unit least-privileged.
+
+[Unit]
+Description=Phase Mirror Agent — high-integrity governance gateway
+Documentation=file:///usr/share/doc/phase-mirror-agent/docs/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=phase-mirror
+Group=phase-mirror
+WorkingDirectory=/var/lib/phase-mirror
+StateDirectory=phase-mirror
+
+EnvironmentFile=/etc/phase-mirror/phase-mirror-agent.env
+ExecStart=/usr/local/bin/phase-mirror-agent
+
+Restart=on-failure
+RestartSec=3
+# Matches the ADR-007 drain window (HTTP 10s -> WS -> WAL flush).
+TimeoutStopSec=15
+
+# Hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+PrivateTmp=yes
+PrivateDevices=yes
+RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+ReadOnlyPaths=/
+ReadWritePaths=/var/lib/phase-mirror
+
+[Install]
+WantedBy=multi-user.target

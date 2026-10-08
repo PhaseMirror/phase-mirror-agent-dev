@@ -1,0 +1,21 @@
+app-id: com.multiplicity.phase-mirror-mcp
+runtime: org.freedesktop.Platform
+runtime-version: '25.08'
+sdk: org.freedesktop.Sdk
+command: phase-mirror-mcp
+finish-args:
+  - --filesystem=home
+  - --filesystem=xdg-data/phase-mirror
+  - --share=network
+  - --talk-name=org.freedesktop.Flatpak
+
+modules:
+  - name: phase-mirror-mcp
+    buildsystem: cargo
+    sources:
+      - type: dir
+        path: /home/multiplicity/Multiplicity/Phase Mirror/phase-mirror-mcp
+    build-commands:
+      - cargo build --release --features lmstudio
+    post-install:
+      - install -Dm755 target/release/phase-mirror-mcp /app/bin/phase-mirror-mcp

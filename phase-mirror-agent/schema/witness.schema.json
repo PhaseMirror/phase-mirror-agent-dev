@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.phase-mirror.foundation/witness.schema.json",
+  "title": "UnifiedWitness",
+  "description": "Governance witness appended to the archivum JSONL. Witnesses form a hash chain identical to the Rust audit WAL: entry_hash = SHA-256(prev_hash || canonical_json(payload)), payload excludes prev_hash and entry_hash. Chain fields (sequence, prev_hash, entry_hash) are assigned by ArchivumStore.writeWitness.",
+  "type": "object",
+  "required": [
+    "witness_id",
+    "action_id",
+    "timestamp",
+    "compliance_evidence",
+    "execution_receipt",
+    "contractivity_score",
+    "veto_status",
+    "violations"
+  ],
+  "properties": {
+    "witness_id": {
+      "type": "string",
+      "description": "CSPRNG-generated UUID (node:crypto randomUUID / webcrypto)."
+    },
+    "action_id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "compliance_evidence": {
+      "type": "string"
+    },
+    "execution_receipt": {
+      "type": "object",
+      "required": ["status", "prime_indices", "r_sc", "c", "contractivity_score"],
+      "properties": {
+        "status": { "type": "string" },
+        "prime_indices": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "r_sc": { "type": "number" },
+        "c": { "type": "number" },
+        "contractivity_score": { "type": "number" }
+      }
+    },
+    "contractivity_score": { "type": "number" },
+    "veto_status": {
+      "type": "string",
+      "enum": ["admitted", "vetoed"]
+    },
+    "witness_hash": { "type": ["string", "null"] },
+    "p_lineage": { "type": ["string", "null"] },
+    "violations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonic chain sequence assigned on write."
+    },
+    "prev_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "entry_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

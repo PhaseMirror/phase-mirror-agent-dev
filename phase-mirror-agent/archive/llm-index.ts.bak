@@ -1,0 +1,81 @@
+// ARCHIVED: LLM-based PhaseMirrorAgent (pre-ALP replacement)
+// Date: 2026-07-01
+// Status: Replaced by ALP Semantic Compiler in src/index.ts
+
+import { pipeline, env, AutoModelForCausalLM, AutoTokenizer } from '@huggingface/transformers';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Configure transformers.js for local model support
+env.allowRemoteModels = true;
+env.localModelPath = process.env.LOCAL_MODEL_PATH || path.join(__dirname, '../SmolLM-360M');
+
+export class PhaseMirrorAgent {
+  private generator: any = null;
+  private isLoaded: boolean = false;
+  private modelPath: string;
+
+  constructor(modelPath?: string) {
+    this.modelPath = modelPath || path.join(__dirname, '../SmolLM-360M');
+  }
+
+  async load(onProgress?: (progress: any) => void) {
+    if (this.isLoaded) return;
+    
+    // Try local model first, fallback to remote
+    try {
+      this.generator = await pipeline('text-generation', this.modelPath, {
+        progress_callback: onProgress,
+      });
+    } catch (e) {
+      console.warn('Local model failed, falling back to Qwen1.5-0.5B-Chat');
+      this.generator = await pipeline('text-generation', 'Xenova/Qwen1.5-0.5B-Chat', {
+        progress_callback: onProgress,
+      });
+    }
+    this.isLoaded = true;
+  }
+
+  async analyze(query: string, systemPrompt?: string): Promise<string> {
+    if (!this.isLoaded) {
+      await this.load();
+    }
+
+    const messages = [];
+    if (systemPrompt) {
+      messages.push({ role: 'system', content: systemPrompt });
+    } else {
+      messages.push({ role: 'system', content: 'You are the Phase Mirror Agent, an AI cognitive assistant.' });
+    }
+    messages.push({ role: 'user', content: query });
+
+    const result = await this.generator(messages, {
+      max_new_tokens: 512,
+      temperature: 0.7,
+      do_sample: true,
+      return_full_text: false
+    });
+
+    if (result && result.length > 0 && result[0].generated_text) {
+      const generated = result[0].generated_text;
+      
+      // If it returned an array of messages (chat template format)
+      if (Array.isArray(generated)) {
+        const lastMessage = generated[generated.length - 1];
+        if (lastMessage.role === 'assistant') {
+          return lastMessage.content;
+        } else {
+          return "[SYSTEM ERROR] Model context limit exceeded or failed to generate tokens. Try a shorter query.";
+        }
+      }
+      
+      // If it returned a string
+      return generated;
+    }
+    
+    return "Analysis failed to generate a valid response.";
+  }
+}

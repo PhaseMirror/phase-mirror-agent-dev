@@ -1,0 +1,12 @@
+[workspace]
+resolver = "2"
+members = [
+    "phase-mirror-agent",
+    "phase-mirror-mcp",
+    "phase-mirror-gpt",
+    "phase-mirror-surface"
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"

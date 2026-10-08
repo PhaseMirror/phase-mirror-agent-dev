@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "mcpVersion": "2024.11.05",
+  "info": {
+    "title": "Phase Mirror Invariant Consistency Oracle",
+    "version": "1.0.0",
+    "description": "High-integrity, safe-by-design governance gateway providing L0 sub-100ns invariant validation and distributed Λ-Archivum Merkle synchronization."
+  },
+  "tools": [
+    {
+      "name": "validate_l0_invariants",
+      "description": "Executes immediate bitmask validation for schema integrity and permission bits over specific operational modes. Adheres strictly to ADR-005 Fail-Closed semantics.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "event_type": {
+            "type": "string",
+            "enum": ["pull_request", "merge_group", "drift"],
+            "description": "The operational phase mode triggering this evaluation check."
+          },
+          "tier": {
+            "type": "string",
+            "enum": ["tier1", "tier2"],
+            "description": "Governance tier enforcement level: tier1 (Authoritative Block), tier2 (Experimental Advisory Warning)."
+          },
+          "permission_bits": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295,
+            "description": "32-bit bitfield mask representing the active permission configuration."
+          },
+          "schema_signature": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295,
+            "description": "32-bit bitfield signature of the incoming schema layout."
+          },
+          "expected_schema": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295,
+            "description": "32-bit baseline expectation mask required to satisfy compliance invariants."
+          }
+        },
+        "required": ["event_type", "tier", "permission_bits", "schema_signature", "expected_schema"]
+      }
+    },
+    {
+      "name": "reconcile_merkle_sync",
+      "description": "Evaluates a remote node's Λ-Archivum snapshot against local state tracking matrices to identify distributed schema or lineage drift.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "remote_root_hash": {
+            "type": "string",
+            "description": "The calculated SHA-256 Merkle root hash received from the remote distributed actor node."
+          },
+          "remote_leaves": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "A flat key-value map representing the remote snapshot's leaves (Proton ID mapping directly to State/Payload Hash pairs)."
+          }
+        },
+        "required": ["remote_root_hash", "remote_leaves"]
+      }
+    },
+    {
+      "name": "get_governance_status",
+      "description": "Returns the current health of the governance floor, including compliance rate, policy version, and overall system state.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "triple_lock_verify",
+      "description": "Executes the full Triple-Lock verification sequence (Genius -> Guardian -> Examiner) for a mission plan.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "mission_id": {
+            "type": "string",
+            "description": "Unique identifier for the mission."
+          },
+          "plan": {
+            "type": "string",
+            "description": "The draft mission plan to be verified."
+          },
+          "permission_bits": {
+            "type": "integer"
+          },
+          "schema_signature": {
+            "type": "integer"
+          },
+          "expected_schema": {
+            "type": "integer"
+          }
+        },
+        "required": ["mission_id", "plan"]
+      }
+    }
+  ]
+}

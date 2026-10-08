@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "phase-mirror-agent.fullname" . }}
+  labels:
+    {{- include "phase-mirror-agent.selectorLabels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  serviceName: {{ include "phase-mirror-agent.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "phase-mirror-agent.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "phase-mirror-agent.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "phase-mirror-agent.fullname" . }}
+      securityContext:
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+      containers:
+        - name: agent
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.config.port }}
+              protocol: TCP
+            - name: ws
+              containerPort: {{ .Values.config.wsPort }}
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: {{ include "phase-mirror-agent.fullname" . }}
+          volumeMounts:
+            - name: operator-key
+              mountPath: /etc/phase-mirror/keys
+              readOnly: true
+            - name: pm-state
+              mountPath: /var/lib/phase-mirror/wal
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 5 && kill -SIGTERM 1"]
+      volumes:
+        - name: operator-key
+          secret:
+            secretName: {{ include "phase-mirror-agent.fullname" . }}-keys
+            defaultMode: 0400
+  volumeClaimTemplates:
+    - metadata:
+        name: pm-state
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        {{- if .Values.persistence.storageClass }}
+        storageClassName: {{ .Values.persistence.storageClass }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size }}

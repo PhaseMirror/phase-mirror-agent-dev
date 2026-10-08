@@ -1,0 +1,17 @@
+🎤 The Phase Mirror Agent has been deployed!
+
+  Mathematical invariants:
+    Contraction bound (c):      monitored at /metrics
+    Tether tension (τ):         monitored at /metrics
+    Audit WAL size:             monitored at /metrics
+
+  Audit API (21 CFR Part 11):
+    GET  /audit/v1/:operator/transitions
+    GET  /audit/v1/:operator/witness/:id/proof
+    POST /audit/v1/:operator/export
+
+  Conversational endpoint:
+    POST /api/command  { "text": "your CNL command" }
+
+  WebSocket (Matrix UI):
+    ws://<host>:3030/ws

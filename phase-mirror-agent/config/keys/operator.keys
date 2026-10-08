@@ -1,0 +1,5 @@
+raw key (show once, keep in your secret manager):
+  pmr_op_72be2cc66c252900790d1e0eef46af95
+
+append to config/keys/operator.keys (chmod 600):
+  admin:operator:write:3f01c855b9b5f05fa64d0586a1aa33a0562bc2e37f6b421b69441ebe9c573c2e

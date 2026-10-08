@@ -1,0 +1,40 @@
+# Data Processing Addendum (DPA)
+
+## Scope
+This Data Processing Addendum supplements the Agreement between the data controller and Phase Mirror GPT for processing personal data.
+
+## Lawful Basis
+Processing is based on:
+- Performance of contract (Article 6(1)(b) GDPR)
+- Legitimate interests (Article 6(1)(f) GDPR) - Governance integrity
+
+## Technical Measures
+
+### Invariant Consistency Oracle
+- All data processed through L0/L1 validation layers
+- Structural validation per ADR-002 within sub-100ns threshold
+- Semantic blocking of sensitive operations (public S3, DROP TABLE, etc.)
+
+### Deterministic Provenance
+- p=7 Data Lineage via Λ-Archivum
+- SHA-256 hash chaining for tamper evidence (ADR-003)
+- Immutable audit trail for all processing events
+
+### Fail-Closed Protection
+- System defaults to BLOCK on any invariant violation (ADR-005)
+- Missing templates treated as compliance failure
+- Zero-trust processing model enforced
+
+## Data Subject Rights
+Requests for access, rectification, erasure shall be handled through:
+- Compliance Floor verification (compliance_rate = 1.0 required)
+- Triple-Lock verification for all data modification requests
+- Immutable logging of all fulfillment actions
+
+## Retention
+Data retention periods aligned with archivum.log persistence:
+- Minimum 7-year retention for governance events
+- SHA-256 chain integrity maintained throughout period
+
+---
+*This template is verified compliant when present as a non-empty file readable by the telemetry system.*

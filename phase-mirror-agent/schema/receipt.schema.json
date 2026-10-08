@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.phase-mirror.foundation/receipt.schema.json",
+  "title": "Receipt",
+  "description": "Execution receipt returned by the executor (src/executor/mod.rs Receipt). A receipt is honest evidence of what happened: status reflects the outcome, dry-run plans carry status \"plan\", deduplicated calls return the stored prior receipt untouched.",
+  "type": "object",
+  "required": [
+    "tool",
+    "status",
+    "idempotency_key",
+    "started_at",
+    "finished_at",
+    "detail",
+    "exit"
+  ],
+  "properties": {
+    "tool": {
+      "type": "string",
+      "description": "Tool name that executed."
+    },
+    "status": {
+      "type": "string",
+      "description": "Outcome status. One of: success, failure, simulated, plan, not_allowed, invalid.",
+      "enum": ["success", "failure", "simulated", "plan", "not_allowed", "invalid"]
+    },
+    "idempotency_key": {
+      "type": "string",
+      "description": "Effective idempotency key (SHA-256 hex) under which this receipt is stored."
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 start timestamp."
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 finish timestamp."
+    },
+    "detail": {
+      "type": "string",
+      "description": "Human-readable evidence of the side effect (e.g. docker compose up command line, or \"no side effect (simulated) for tool …\")."
+    },
+    "exit": {
+      "type": "integer",
+      "description": "Process exit code for real adapters, 0 for simulated/plan."
+    }
+  },
+  "additionalProperties": false
+}

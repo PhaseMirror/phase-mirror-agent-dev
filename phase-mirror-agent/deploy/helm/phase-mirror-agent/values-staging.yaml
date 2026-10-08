@@ -1,0 +1,87 @@
+# values-staging.yaml — Phase Mirror Agent staging environment overrides.
+# Usage:
+#   helm upgrade --install phase-mirror-agent ./deploy/helm/phase-mirror-agent \
+#     -f deploy/helm/phase-mirror-agent/values-staging.yaml \
+#     --namespace phase-mirror --create-namespace
+
+replicaCount: 2
+
+image:
+  repository: ghcr.io/your-org/phase-mirror-agent
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+secrets:
+  operatorKey: ""   # REQUIRED — inject via CI/CD secret manager
+
+config:
+  logLevel: "info"
+  jsonLogs: "true"
+  port: "8080"
+  wsPort: "3030"
+  semanticEpsilon: "0.3"
+  ethRpcUrl: ""            # Optional: Ethereum RPC for state anchoring
+  anchorContractAddress: "" # Optional: AnchorContract address
+
+persistence:
+  enabled: true
+  storageClass: "standard"   # adjust to cluster default (gp2, pd-standard, etc.)
+  size: 20Gi
+
+service:
+  type: ClusterIP
+  port: 8080
+  wsPort: 3030
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  hosts:
+    - host: agent.your-domain.com
+      paths:
+        - path: /api
+          pathType: Prefix
+          backendPort: 8080
+        - path: /audit
+          pathType: Prefix
+          backendPort: 8080
+        - path: /ws
+          pathType: Prefix
+          backendPort: 3030
+  tls:
+    - secretName: phase-mirror-agent-tls
+      hosts:
+        - agent.your-domain.com
+
+networkPolicy:
+  enabled: true
+  ingressControllerNamespace: ingress-nginx
+  monitoringNamespace: monitoring
+
+serviceMonitor:
+  enabled: true
+  interval: 30s
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "500m"
+  limits:
+    memory: "2Gi"
+    cpu: "2000m"
+
+nodeSelector: {}
+tolerations: []
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: phase-mirror-agent
+          topologyKey: kubernetes.io/hostname

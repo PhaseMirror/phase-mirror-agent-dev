@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: phase-mirror-agent-config
+  namespace: default
+  labels:
+    app: phase-mirror-agent
+data:
+  # Deployment environment
+  PHASE_MIRROR_ENV: "production"
+  
+  # Durable runtime state directory
+  PHASE_MIRROR_STATE_DIR: "/var/lib/phase-mirror/state"
+  
+  # Logging configuration (JSON for fluentd/datadog/promtail parsing)
+  PHASE_MIRROR_LOG_FORMAT: "json"
+  PHASE_MIRROR_LOG_LEVEL: "info"
+  
+  # Allowed CORS origins
+  PHASE_MIRROR_CORS_ORIGINS: "http://localhost:5173,http://localhost:3000"
+  
+  # Path to the mounted operator keys secret
+  PHASE_MIRROR_OPERATOR_KEYS_FILE: "/config/keys/operator.keys"
+  
+  # Plain HTTP is enabled here by default.
+  # For TLS, remove NO_TLS and configure PHASE_MIRROR_TLS_CERT/KEY
+  # along with a volume mount for your certificate.
+  PHASE_MIRROR_NO_TLS: "true"

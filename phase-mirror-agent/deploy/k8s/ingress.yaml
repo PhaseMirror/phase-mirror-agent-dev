@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: phase-mirror-agent
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"  # if using cert-manager
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/websocket-services: "phase-mirror-agent"  # enables WS upgrade
+spec:
+  tls:
+  - hosts:
+    - agent.phase-mirror.example.com   # replace with your domain
+    secretName: phase-mirror-agent-tls
+  rules:
+  - host: agent.phase-mirror.example.com
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: phase-mirror-agent
+            port:
+              number: 8080
+      - path: /audit
+        pathType: Prefix
+        backend:
+          service:
+            name: phase-mirror-agent
+            port:
+              number: 8080
+      - path: /ws
+        pathType: Prefix
+        backend:
+          service:
+            name: phase-mirror-agent
+            port:
+              number: 3030

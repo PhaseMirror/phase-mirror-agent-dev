@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: phase-mirror-agent
+  namespace: default
+  labels:
+    app: phase-mirror-agent
+spec:
+  serviceName: "phase-mirror-agent"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phase-mirror-agent
+  template:
+    metadata:
+      labels:
+        app: phase-mirror-agent
+    spec:
+      # Enforce the non-root identity defined in the Dockerfile
+      securityContext:
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+      containers:
+      - name: phase-mirror-agent
+        image: phase-mirror-agent:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 3030
+          name: ws
+        envFrom:
+        - configMapRef:
+            name: phase-mirror-agent-config
+        volumeMounts:
+        - name: pm-state
+          mountPath: /var/lib/phase-mirror/state
+        - name: operator-keys
+          mountPath: /config/keys
+          readOnly: true
+        # Graceful stop: SIGTERM is handled internally by the agent to drain the WAL
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 2"]
+        # Readiness gate blocks traffic until the audit WAL is fully verified and writable
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        # Liveness checks if the HTTP router is responding
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+      volumes:
+      - name: operator-keys
+        secret:
+          secretName: phase-mirror-agent-keys
+  # Persistent volume for the durable audit WAL
+  volumeClaimTemplates:
+  - metadata:
+      name: pm-state
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi

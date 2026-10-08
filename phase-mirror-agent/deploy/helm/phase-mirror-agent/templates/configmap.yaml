@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "phase-mirror-agent.fullname" . }}
+data:
+  PHASE_MIRROR_LOG_LEVEL: {{ .Values.config.logLevel | quote }}
+  PHASE_MIRROR_JSON_LOGS: {{ .Values.config.jsonLogs | quote }}
+  PHASE_MIRROR_PORT: {{ .Values.config.port | quote }}
+  PHASE_MIRROR_WS_PORT: {{ .Values.config.wsPort | quote }}
+  PHASE_MIRROR_SEMANTIC_EPSILON: {{ .Values.config.semanticEpsilon | quote }}
+  PHASE_MIRROR_ETH_RPC_URL: {{ .Values.config.ethRpcUrl | quote }}
+  PHASE_MIRROR_ANCHOR_CONTRACT_ADDRESS: {{ .Values.config.anchorContractAddress | quote }}

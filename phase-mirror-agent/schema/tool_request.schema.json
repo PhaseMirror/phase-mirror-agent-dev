@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.phase-mirror.foundation/tool_request.schema.json",
+  "title": "ToolRequest",
+  "description": "Governed tool-execution request produced by the CNL bridge (src/cnl_bridge.rs action_to_tool_request) and admitted by the executor (src/executor/mod.rs). Canonical: cnl_bridge::canonical_action_string uses serde_json with sorted keys, matching chain.ts canonicalJson.",
+  "type": "object",
+  "required": ["tool", "args", "dry_run"],
+  "properties": {
+    "tool": {
+      "type": "string",
+      "description": "Tool name: deploy | scale | destroy | revoke.",
+      "enum": ["deploy", "scale", "destroy", "revoke"]
+    },
+    "args": {
+      "type": "array",
+      "description": "Positional arguments in canonical order (service, target, replicas for deploy; service, replicas for scale; service for destroy; previous_action_id for revoke).",
+      "items": { "type": "string" }
+    },
+    "idempotency_key": {
+      "type": ["string", "null"],
+      "description": "Client-supplied dedup key. The executor derives effective_idempotency_key = SHA-256(principal|tool|args|dry_run|client key)."
+    },
+    "dry_run": {
+      "type": "boolean",
+      "description": "When true the executor plans a receipt (status \"plan\") without invoking any side effect."
+    },
+    "principal": {
+      "type": ["string", "null"],
+      "description": "Caller identity used in the effective idempotency key."
+    }
+  },
+  "additionalProperties": false
+}

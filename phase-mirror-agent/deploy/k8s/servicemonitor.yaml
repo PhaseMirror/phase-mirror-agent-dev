@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: phase-mirror-agent
+  namespace: default
+  labels:
+    app: phase-mirror-agent
+spec:
+  selector:
+    matchLabels:
+      app: phase-mirror-agent
+  endpoints:
+  - port: http                # matches the port name in your service.yaml
+    interval: 30s
+    path: /metrics            # exposed by the agent at :8080/metrics

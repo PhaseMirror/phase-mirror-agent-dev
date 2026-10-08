@@ -1,0 +1,23 @@
+# config/keys/operator.keys.example
+#
+# Operator API keys for phase-mirror-agent (ADR-006 §2.1).
+# Copy this file to `operator.keys` and chmod 600:
+#
+#   cp config/keys/operator.keys.example config/keys/operator.keys
+#   chmod 600 config/keys/operator.keys
+#
+# Generate real keys with scripts/gen-operator-key.sh:
+#
+#   scripts/gen-operator-key.sh alice operator:write
+#   scripts/gen-operator-key.sh carol operator:read
+#
+# Entry format:  <id>:<scope>:<sha256-of-key>
+# Scopes:        operator:read  — GET /audit/*, /audit/integrity, /health, /ready
+#                operator:write — everything, including POST /api/command
+# The server stores and compares only SHA-256 digests; never put raw keys here.
+#
+# A missing operator.keys is fine in dev mode (loopback read exemption applies)
+# but ABORTS startup in production mode (PHASE_MIRROR_ENV=production).
+
+# alice:operator:write:0000000000000000000000000000000000000000000000000000000000000000
+# carol:operator:read:1111111111111111111111111111111111111111111111111111111111111111

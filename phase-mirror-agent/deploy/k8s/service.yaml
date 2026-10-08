@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: phase-mirror-agent
+  namespace: default
+  labels:
+    app: phase-mirror-agent
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+    - port: 3030
+      targetPort: 3030
+      protocol: TCP
+      name: ws
+  selector:
+    app: phase-mirror-agent

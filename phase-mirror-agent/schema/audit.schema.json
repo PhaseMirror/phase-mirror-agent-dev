@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.phase-mirror.foundation/audit-entry.schema.json",
+  "title": "AuditEntry",
+  "description": "A single append-only audit record in the hash-chained JSONL WAL. The chain algorithm is the single source of truth shared by Rust (src/audit/store.rs) and TS (src/alp-nlp/chain.ts): entry_hash = SHA-256(prev_hash || canonical_json(payload)), where payload is the record with prev_hash and entry_hash removed and canonical_json serializes keys in sorted order. The first entry links from the genesis hash (64 zero bytes).",
+  "type": "object",
+  "required": [
+    "id",
+    "sequence",
+    "timestamp",
+    "event_type",
+    "details",
+    "prev_hash",
+    "entry_hash"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Durable, monotonically increasing record id (persisted, never reset on restart)."
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonic chain sequence, continues across restart and WAL rotation."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "event_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "actor": {
+      "type": ["string", "null"]
+    },
+    "details": {
+      "type": "string"
+    },
+    "prev_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 hex digest of the previous record's entry_hash, or the genesis hash for the first record."
+    },
+    "entry_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 hex digest over prev_hash || canonical_json(record without prev_hash and entry_hash)."
+    }
+  },
+  "additionalProperties": false
+}

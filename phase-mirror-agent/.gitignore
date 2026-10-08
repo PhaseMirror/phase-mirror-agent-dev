@@ -1,0 +1,36 @@
+# Rust build output
+/target/
+
+# Node dependencies & build output
+node_modules/
+/dist/
+
+# Runtime state (witness archives, ledgers)
+state/
+*.log
+*.jsonl
+
+# Cross-language chain fixture must stay tracked (Rust re-verifies it)
+!tests/fixtures/
+!tests/fixtures/ts-witnesses.jsonl
+
+# Secrets & TLS material
+.env
+.env.*
+!.env.example
+certs/
+*.crt
+*.key
+*.pem
+
+# Editors / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Local LM Studio runtime & tooling pointers
+.lmstudio/
+lmstudio/
+.lmstudio-home-pointer

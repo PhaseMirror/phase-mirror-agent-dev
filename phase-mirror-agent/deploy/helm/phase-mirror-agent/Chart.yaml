@@ -1,0 +1,18 @@
+apiVersion: v2
+name: phase-mirror-agent
+description: Phase Mirror Autonomous Agent – mathematically governed, self‑certifying CNL agent
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - phase-mirror
+  - cnl
+  - alp
+  - formal-verification
+  - sovereign-ai
+home: https://operatoratlas.citizengardens.org
+sources:
+  - https://github.com/your-org/phase-mirror
+maintainers:
+  - name: Phase Mirror Core Team
+    email: core@phase-mirror.example.com

@@ -1,0 +1,30 @@
+# Phase Mirror — governed tool-execution backplane (ADR-008 §4.4)
+#
+# Pass this file to the agent with --tools-config (or PHASE_MIRROR_TOOL_CONFIG).
+# Real adapters are FAIL-CLOSED and opt-in: an adapter only activates when
+#   (1) it is enabled here AND
+#   (2) its family appears in --tool-allow / PHASE_MIRROR_TOOL_ALLOW.
+# With no config file and no allow list the executor falls back to simulated
+# adapters that record receipts without side effects.
+#
+#   PHASE_MIRROR_TOOL_ALLOW=compose,systemd \
+#     phase-mirror-agent --tools-config config/tools.toml
+
+[tools]
+
+[tools.compose]
+# Enables the real `docker compose` adapter (deploy/scale -> up -d --scale,
+# destroy/revoke -> rm -sf). Default: false.
+enabled = true
+# Compose project file; default: deploy/compose.yaml
+compose_file = "deploy/compose.yaml"
+
+[tools.systemd]
+# Enables the real `systemctl` adapter (start/stop). scale is not supported.
+# Default: false.
+enabled = true
+
+[allow]
+# Anchored regex allow-list for services. Empty list rejects ALL services
+# (fail-closed). Each pattern is wrapped as ^(?:pattern)$.
+services = ["^web-service$", "^database-[0-9]+$"]

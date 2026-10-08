@@ -1,0 +1,29 @@
+
+running 1 test
+=== Initializing Triple-Lock Harness ===
+
+=== Scenario 1: Nominal Pass ===
+SUCCESS. Generated Witness: TripleLockWitness {
+    mission_id: "M-001",
+    witness_hash: "c1d03ead1c5506b1eb63f75bf0cbd7175e63bdea3411141b9b591dd2d7924368",
+    governance_status: "VERIFIED",
+    p_lineage: "p=7:seq:1",
+}
+
+=== Scenario 2: Semantic Block (L1) ===
+EXPECTED L1 BLOCK: ADR-006: Guardian Block - Semantic Violation: 'public'
+
+=== Scenario 3: Compliance Block (L0 - Telemetry) ===
+EXPECTED L0 TELEMETRY BLOCK: ADR-006: Guardian Block - Compliance Floor Violation (66.67%)
+
+=== Scenario 4: Structural Block (L0 - Bitmask) ===
+EXPECTED L0 STRUCTURAL BLOCK: ADR-006: Guardian Block - L0 Structural Violation: ADR-005: Critical Schema Violation
+
+=== Scenario 5: Durable Recovery ===
+Recovered Ledger Entries (Including Block Receipts): 3
+
+=== All Scenarios Passed 100% ===
+test test_triple_lock_harness_scenarios ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

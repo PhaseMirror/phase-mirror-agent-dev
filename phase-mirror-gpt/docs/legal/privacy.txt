@@ -1,0 +1,36 @@
+# Privacy Policy Addenda
+
+## Phase Mirror GPT Privacy Framework
+
+### 1. Zero-Surveillance Audit
+- All sensitive data redacted at tool boundary using HMAC-style nonces
+- Λ-Archivum records proof hashes without exposing raw PII
+- Signature field contains "REDACTED_HMAC" for privacy preservation
+
+### 2. Data Minimization
+- Only essential governance metadata collected
+- Proton IDs hashed for lineage without revealing content
+- No user data persisted beyond validation scope
+
+### 3. Consent & Control
+- Users control semantic policy via config/policy.toml
+- Hot-reloadable blocklist allows dynamic consent withdrawal
+- File system watcher triggers telemetry refresh on policy changes
+
+### 4. Telemetry Compliance
+- compliance_rate = 1.0 indicates all legal artifacts present
+- revenue_velocity_delayed flag indicates degraded operation status
+- All status checks logged to stderr for observability
+
+### 5. Rights Management
+- Right to erasure: Delete archivum.log and binary cache
+- Right to restriction: Configure policy.toml blocking rules
+- Right to attestation: View witness_hash in MASTER_REGISTRY.md
+
+### 6. Security Measures
+- Memory-safe Rust implementation prevents buffer overflows
+- Async WAL ensures crash recovery without data loss
+- Atomic file writes prevent corruption during updates
+
+---
+*This template is verified compliant when present as a non-empty file readable by the telemetry system.*

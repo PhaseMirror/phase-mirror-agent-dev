@@ -45,6 +45,7 @@ struct PrismpmLock {
     platforms: Vec<Platform>,
 }
 
+#[derive(Debug)]
 struct ResolvedLock {
     prismpm_digests: Vec<String>,
 }

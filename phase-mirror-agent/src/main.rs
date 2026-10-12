@@ -18,7 +18,10 @@ use serde::{Deserialize, Serialize};
 use tower_http::cors::{AllowMethods, AllowOrigin, CorsLayer};
 use tracing::{error, info, warn};
 
-use pirtm_apps::cnl::compile_command;
+// pirtm-apps is outside this workspace. CNL compilation is not a Phase Mirror binary.
+fn compile_command(_text: &str) -> Result<std::convert::Infallible, String> {
+    Err("pirtm-apps is not in this workspace".into())
+}
 
 mod audit;
 mod audit_api;

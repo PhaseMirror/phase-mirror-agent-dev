@@ -1,8 +1,46 @@
 use crate::executor::ToolRequest;
 use chrono::Utc;
-use pirtm_apps::cnl::VerifiedAction;
+use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum VerifiedAction {
+    Deploy {
+        service: String,
+        target: String,
+        replicas: u32,
+    },
+    Scale {
+        service: String,
+        replicas: u32,
+    },
+    Destroy {
+        service: String,
+    },
+    Revoke {
+        previous_action_id: String,
+    },
+}
+
+#[derive(Debug, Clone)]
+pub struct CompilationResult {
+    pub moc_word: Vec<String>,
+    pub c: f64,
+    pub rsc: f64,
+    pub diagnostic: Option<String>,
+    pub verified_action: Result<VerifiedAction, String>,
+}
+
+impl CompilationResult {
+    pub fn invariants_passed(&self) -> bool {
+        false
+    }
+}
+
+pub fn compile_command(_text: &str) -> Result<CompilationResult, String> {
+    Err("CNL compilation refused: pirtm-apps crate is not in-tree".to_string())
+}
 
 pub fn action_to_tool_request(action: &VerifiedAction) -> ToolRequest {
     let (tool, args) = match action {

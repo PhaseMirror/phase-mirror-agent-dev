@@ -1,4 +1,9 @@
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
+
+pub type Prime = u64;
+pub type TissueId = u64;
+pub type Tick = u64;
 
 /// `verification-harness` lives outside this workspace
 /// (`../../../Foundry/tests/verification-harness`). This module keeps the
@@ -6,13 +11,13 @@ use serde::{Deserialize, Serialize};
 /// not here.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GovernedBridgeRequest {
-    pub src_prime: u64,
-    pub tgt_prime: u64,
-    pub tissue_id: u64,
-    pub current_tick: u64,
-    pub jubilee_window: (u64, u64),
-    pub audit_blocks: Vec<serde_json::Value>,
-    pub morphisms: Vec<serde_json::Value>,
+    pub src_prime: Prime,
+    pub tgt_prime: Prime,
+    pub tissue_id: TissueId,
+    pub current_tick: Tick,
+    pub jubilee_window: (Tick, Tick),
+    pub audit_blocks: Vec<Value>,
+    pub morphisms: Vec<Value>,
     pub pre_memory: [u8; 4],
     pub post_memory: [u8; 4],
 }

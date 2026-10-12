@@ -1,0 +1,19 @@
+The "two legal persons" and "second cryptographic identity" constraints have been separated into two distinct acts to prevent dissonance between document acceptance and runtime unfreeze logic.
+
+### 1. Document Accept (Governance)
+
+This phase operates the H2 lever for ADR acceptance (e.g., ADR 003).
+
+* **Mechanism**: Two named persons, holding two distinct keys, each sign the SHA-256 hash of the canonical ADR bytes.
+* **Storage**: Signatures stay detached. Do not append signatures to the document body, as this would alter the signed bytes.
+* **State**: The document status remains `Proposed` until both signatures verify.
+* **Owner**: The two key holders.
+* **Metric**: `git verify` or an equivalent detached-signature check on that blob.
+
+### 2. Runtime Unfreeze (Engine Execution)
+
+**DO NOT RUN.**
+
+* **Constraint**: No P_2/P_3 keygen, no out-of-band handshake, no Sedona compile for a ProofHash, and no R3-FREEZE clear.
+* **Condition**: Execution is suspended until a public path names the verifier, the freeze flag, and the proof object. That path does not currently exist.
+* **Rationale**: A document-accept rule cannot be operated as a runtime unfreeze. Sedona Spine as a certify stage is already Unbound in the kiln register. A workflow file is not an engine that refuses execution until two signatures arrive.

@@ -4,7 +4,8 @@ members = [
     "phase-mirror-agent",
     "phase-mirror-mcp",
     "phase-mirror-gpt",
-    "phase-mirror-surface"
+    "phase-mirror-surface",
+    "crates/verification-harness",
 ]
 
 [workspace.package]

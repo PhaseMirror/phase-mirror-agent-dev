@@ -3,12 +3,7 @@ name = "phase-mirror-agent"
 version = "1.0.0"
 edition = "2021"
 
-
-[workspace]
-
 [dependencies]
-pirtm-apps = { path = "../../Prime/packages/rust/pirtm-apps" }
-
 tokio = { version = "1", features = ["full"] }
 axum = { version = "0.7", features = ["ws"] }
 axum-server = { version = "0.7", features = ["tls-rustls"] }

@@ -4,7 +4,6 @@ version = "1.0.0-alpha"
 edition = "2024"
 
 [dependencies]
-verification-harness = { path = "../../../Foundry/tests/verification-harness" }
 phase-mirror-gpt = { path = "../phase-mirror-gpt" }
 phase-mirror-surface = { path = "../phase-mirror-surface" }
 serde = { version = "1.0", features = ["derive"] }

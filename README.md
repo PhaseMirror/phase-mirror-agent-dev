@@ -1,73 +1,121 @@
 ---
 title: Phase Mirror Agent Development Workspace
-description: Autonomous evolution and development repository for the Phase Mirror Agent, integrated with the Oracle MCP Server and PrismPM SDK boundary.
+description: Rust workspace for the Phase Mirror governance stack, including the agent, MCP server, GPT governance surface, and API contracts.
 status: Active
-license: MIT OR Apache-2.0
+license: Phase Mirror License v1.0
 ---
 
-# Phase Mirror Agent Dev Environment
+# Phase Mirror Agent Development Workspace
 
-An exclusive, self-contained development repository for the continuous evolution of the **Phase Mirror Agent**. This workspace unites the autonomous agent, its Oracle MCP Server, and the PrismPM SDK integration under a cohesive architectural boundary driven by webhooks and GitOps automation.
+This repository is the development workspace for the Phase Mirror stack: a governance-first set of Rust components designed to enforce integrity, verification, and policy boundaries in agentic workflows.
 
-## 🎯 Purpose
+The project currently contains a Cargo workspace with four primary packages:
 
-This repository operationalizes the Phase Mirror methodology for agentic systems:
-- **Autonomous Evolution:** The agent evolves its own capabilities in response to GitHub webhook events.
-- **Strict Methodological Boundary:** The MCP Server provides a closed, structural interface to the `prismpm` SDK (Model Check, Verify, Generate, Evidence Read), preventing the agent from leaking compiler implementations into its own logic.
-- **Continuous Verification:** Git workflows automatically validate the agent's structural compliance and run the verification matrices against newly evolved policies.
+- `phase-mirror-agent` — the core governance gateway and execution runtime
+- `phase-mirror-mcp` — the MCP server boundary for structured tool access
+- `phase-mirror-gpt` — governance and semantic validation surface
+- `phase-mirror-surface` — shared surface/API contracts
 
-## 🏗️ Architecture
+The design prioritizes fail-closed behavior, provenance logging, verification gates, and explicit policy enforcement over convenience or unrestricted automation.
 
-The workspace contains four primary architectural pillars structured as a unified Cargo workspace:
+## Project status
 
-1. **`phase-mirror-agent`**: The core autonomous system capable of multi-turn reasoning and capability evolution.
-2. **`phase-mirror-mcp`**: The Model Context Protocol (MCP) server. Acts as the rigorous Oracle Boundary, exposing the PrismPM SDK strictly via constrained tools.
-3. **`phase-mirror-surface` & `phase-mirror-gpt`**: Sub-components handling the agentic surface interfaces, structured logging, and integration mappings.
+The repository is actively maintained as a Rust workspace and reflects a mature development direction rather than a placeholder prototype.
 
-### The Oracle Joint (Option 3 Implementation)
-The MCP server enforces the Option 3 methodology:
-- Cannot execute arbitrary commands.
-- Binds strictly to the `prismpm.lock` environment.
-- Validates structural shapes for SDK primitives before relaying actions.
+Current focus areas include:
 
-## 🚀 Getting Started
+- integrity-first command execution and policy gates
+- durable, append-only audit and provenance flows
+- structured MCP interfaces for governed tool use
+- governance and verification surfaces for agentic operations
+- deployment and operational readiness guidance within the workspace
+
+## Workspace structure
+
+```text
+phase-mirror-agent-dev/
+├── Cargo.toml
+├── LICENSE
+├── README.md
+├── CONTRIBUTING.md
+├── SECURITY.md
+├── phase-mirror-agent/
+├── phase-mirror-mcp/
+├── phase-mirror-gpt/
+├── phase-mirror-surface/
+└── .github/
+```
+
+## Components
+
+### `phase-mirror-agent`
+
+The core runtime for governed command processing, auditability, and operational control. This crate is the main execution layer and contains the agent-side orchestration and validation flow.
+
+### `phase-mirror-mcp`
+
+The MCP server provides an explicitly constrained interface for tool access and governance enforcement. It acts as a structured boundary between external systems and the agent's operational surfaces.
+
+### `phase-mirror-gpt`
+
+The GPT-facing governance layer focuses on plan validation, semantic guards, and policy-aware execution checks. It provides the governance surface expected by an agentic workflow.
+
+### `phase-mirror-surface`
+
+A shared layer for surface contracts and interface definitions used across the workspace.
+
+## Getting started
 
 ### Prerequisites
-- [Rust Toolchain](https://rustup.rs/) (v1.89+)
-- Devcontainer runtime (to guarantee identical execution environments)
-- `gh` CLI (for automated PR and issue handling via MCP)
 
-### Bootstrapping
+- Rust toolchain (current workspace target supports recent stable Rust)
+- Cargo
+- Git
+- Optional: an MCP-capable client such as Claude Desktop or another compatible host
 
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url> phase-mirror-agent-dev
-   cd phase-mirror-agent-dev
-   ```
+### Build
 
-2. **Launch the MCP Server:**
-   ```bash
-   cargo run -p phase-mirror-mcp
-   ```
+```bash
+git clone https://github.com/PhaseMirror/phase-mirror-agent-dev.git
+cd phase-mirror-agent-dev
+cargo build --workspace
+```
 
-3. **Start the Agent & Webhook Listener:**
-   ```bash
-   cargo run -p phase-mirror-agent -- --listen-webhooks
-   ```
+### Test
 
-## 🔄 Automation & Webhooks
+```bash
+cargo test --workspace
+```
 
-This repository orchestrates its own evolution:
-- **`.github/workflows/evolution.yml`**: On every commit to `main`, this action builds the Oracle MCP, runs bounded model checks, and dispatches an evolution webhook.
-- **Agent Webhook Listener (`/webhook/github`)**: Listens to repository events, validates the payload, and dynamically executes `prismpm_verify` through the MCP context to formalize its new behavior.
+### Run the agent
 
-## 📜 Contributing
+```bash
+cargo run -p phase-mirror-agent -- --help
+```
 
-When contributing to this workspace, respect the Oracle bounds:
-1. Do not vendor or implement PrismPM logic directly in the agent or the server.
-2. Extend capabilities by exposing explicit schema-bound tools in the MCP.
-3. Validate boundaries using local plants before merging.
+For specific runtime details and operational usage, refer to the package-level README files in each crate.
 
-## ⚖️ License
+## Development and contribution
 
-Dual-licensed under the terms of both the MIT License and the Apache License (Version 2.0).
+Contributions are welcome, but the project is intentionally governed by strict boundaries. Review the existing repository guidance before proposing changes.
+
+- `CONTRIBUTING.md` — contribution process and expectations
+- `SECURITY.md` — vulnerability reporting and security expectations
+
+## Licensing
+
+This repository is licensed under the Phase Mirror License v1.0.
+
+See the repository's `LICENSE` file for the full terms.
+
+Important: this project is not dual-licensed under MIT OR Apache-2.0. The active licensing for this repository is the `Phase Mirror License` included in the root of this project.
+
+The license contains operational and use restrictions, including limits on hosted/managed service use and other conditions that should be reviewed before deployment, commercialization, or redistribution.
+
+## Security
+
+If you find a security issue, please follow the procedures in `SECURITY.md` rather than opening a public discussion for a sensitive issue.
+
+## Repository intent
+
+Phase Mirror is not a permissive “run anything” agent workspace. It is a structured, verification-oriented system intended to apply governance, evidence, and strict boundaries to agentic decision-making and execution.

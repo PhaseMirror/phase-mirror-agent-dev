@@ -58,15 +58,21 @@ fn test_stratification_witness_full_pipeline() {
     assert_eq!(receipt.norm, Rational::new(1, 6).unwrap());
     assert!(receipt.norm.is_below_one());
 
-    // Verified PIRTM MCP counterpart anchor:
-    // Calling `pirtm_verify_ensemble` with ensemble name "probe", theorem anchor "a",
-    // adjacency [[0, 0], [1, 0]], and lambdas [1/6, 1/6] yields status ACCEPT,
-    // exact_rational_norm_1: [1, 6], and seal_hash: "a7b91766d4d36cb411d83d41dc3d465b5a5fe04b2ae6b698c1e54ade57c595d7".
-    // Note (SPEC.md §34.0): LexLean receipts use hash authority `lexlean-contractivity-v1`
-    // because the compiler's seal_hash preimage is sovereign to PIRTM.
-    const PIRTM_MCP_SEAL_HASH: &str =
-        "a7b91766d4d36cb411d83d41dc3d465b5a5fe04b2ae6b698c1e54ade57c595d7";
-    assert_eq!(PIRTM_MCP_SEAL_HASH.len(), 64);
+    // SPEC.md §34.0 / §34.4 Grounding:
+    // LexLean's contractivity receipt is strictly under `lexlean-contractivity-v1`.
+    // The compiler's `seal_hash` preimage is sovereign to PIRTM and not recoverable
+    // by LexLean. Reconstructing floats at the MCP edge is an external boundary conversion,
+    // not a LexLean receipt. Computing the seal inside this crate would be the substitution
+    // §34.4 forbids. Hence, this crate tests internal rational contractivity and §34.4
+    // stratification invariance; external MCP seal verification belongs to the process boundary.
+    assert_eq!(ContractivityReceipt::HASH_AUTHORITY, "lexlean-contractivity-v1");
+    let Json::Obj(receipt_fields) = receipt.to_json() else {
+        panic!("receipt json must be obj");
+    };
+    assert_eq!(
+        receipt_fields.get("hash_authority"),
+        Some(&Json::Str("lexlean-contractivity-v1".to_string()))
+    );
 
     // Step 3: Construct the optional §34 layer
     let snapaddr = stratum.snapaddr();

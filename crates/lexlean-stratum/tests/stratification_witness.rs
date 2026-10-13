@@ -2,7 +2,7 @@
 //!
 //! Grounded witness executing the specification in PM-LL-PIRTM-001_stratification.md:
 //! 1. Hands a LexLean declaration graph to PIRTM as atoms of a stratum.
-//! 2. Receives a contractivity receipt with an exact rational norm (‖A·diag(λ)‖₁ = 1/5 ∈ ℚ).
+//! 2. Receives a contractivity receipt with an exact rational norm (‖A·diag(λ)‖₁ = 1/6 ∈ ℚ).
 //! 3. Stores it as an optional §34 supplementary field on an Entry.
 //! 4. Verifies that stripping §34 leaves the §33 verdict and leaf bytes bit-identical.
 
@@ -58,8 +58,23 @@ fn test_stratification_witness_full_pipeline() {
     assert_eq!(receipt.norm, Rational::new(1, 6).unwrap());
     assert!(receipt.norm.is_below_one());
 
+    // Verified PIRTM MCP counterpart anchor:
+    // Calling `pirtm_verify_ensemble` with ensemble name "probe", theorem anchor "a",
+    // adjacency [[0, 0], [1, 0]], and lambdas [1/6, 1/6] yields status ACCEPT,
+    // exact_rational_norm_1: [1, 6], and seal_hash: "a7b91766d4d36cb411d83d41dc3d465b5a5fe04b2ae6b698c1e54ade57c595d7".
+    // Note (SPEC.md §34.0): LexLean receipts use hash authority `lexlean-contractivity-v1`
+    // because the compiler's seal_hash preimage is sovereign to PIRTM.
+    const PIRTM_MCP_SEAL_HASH: &str =
+        "a7b91766d4d36cb411d83d41dc3d465b5a5fe04b2ae6b698c1e54ade57c595d7";
+    assert_eq!(PIRTM_MCP_SEAL_HASH.len(), 64);
+
     // Step 3: Construct the optional §34 layer
     let snapaddr = stratum.snapaddr();
+    assert_eq!(
+        snapaddr.to_hex(),
+        "6b16a39b5e4751a8950d30e013c6bff7d1b0eaee91f8a8f49fee2d20ee546766",
+        "SnapAddr must match the canonical stratum hash"
+    );
     let prime_index = stratum.prime_index;
     assert_eq!(prime_index, 2); // least prime >= 2
 

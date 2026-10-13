@@ -59,7 +59,7 @@ The witness described above is executed and physically in-tree:
      - `seal_hash`: `a7b91766d4d36cb411d83d41dc3d465b5a5fe04b2ae6b698c1e54ade57c595d7`
 
 3. **§34 Supplementary Layer**:
-   - `snapaddr`: `3612d46e38e553da1f7df2094aa9a785721115e85d985a9df61c77f0d0eec95d`
+   - `snapaddr`: `6b16a39b5e4751a8950d30e013c6bff7d1b0eaee91f8a8f49fee2d20ee546766`
    - `prime_index`: `2` (least prime $\ge 2$)
    - `contractivity`: `ContractivityReceipt` (domain: `lexlean-contractivity-v1`, norm: $[1, 6]$, status: `ACCEPT`)
    - `zeno_finton`: `ZenoFinton::at(0)` ($\kappa(0) = 1$)

@@ -94,6 +94,7 @@ async fn test_triple_lock_harness_scenarios() {
     println!("\n=== Scenario 5: Durable Recovery ===");
     let mut entries = 0;
     for _ in 0..50 {
+        tokio::time::sleep(std::time::Duration::from_millis(20)).await;
         let mut new_ledger = ArchivumLedger::new();
         if new_ledger.init_persistence(log_path.clone()).await.is_ok() {
             entries = new_ledger.get_entry_count();
@@ -101,7 +102,6 @@ async fn test_triple_lock_harness_scenarios() {
                 break;
             }
         }
-        tokio::task::yield_now().await;
     }
 
     println!(

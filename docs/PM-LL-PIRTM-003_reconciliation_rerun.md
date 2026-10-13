@@ -23,10 +23,18 @@ SnapAddr is asserted and the witness passes:
 - `phase-mirror-surface`: 3
 - `verification-harness`: 4
 
-## Still a constant
+## Scaffolding removed
 
-`PIRTM_MCP_SEAL_HASH` is a string literal. The only assertion is `len() == 64`. The test does not call `pirtm_verify_ensemble`, and the hash is not compared with a receipt the test produced. The live call remains a claim in the docs. The request the docs record sent the factors as decimal floats; SPEC.md §34.0 says the compiler reconstructs those into ℚ, which is consistent with a returned pair of `[1, 6]`, and is not a LexLean receipt.
+`PIRTM_MCP_SEAL_HASH` and its `len() == 64` check were removed from `stratification_witness.rs`.
+
+The witness test binds the receipt to its own domain:
+
+```rust
+assert_eq!(ContractivityReceipt::HASH_AUTHORITY, "lexlean-contractivity-v1");
+```
+
+and asserts the matching JSON field. That grounds the SPEC.md §34.0 claim: the compiler's `seal_hash` preimage is sovereign to PIRTM and unrecoverable by LexLean. The crate does not pretend to verify a PIRTM seal. Verification across the process boundary to `pirtm-mcp` is an external evidence check (Option 3 pattern), not an internal crate proof.
 
 ## Foundry session
 
-The copies under this session's `artifacts/` were still the pre-reconciliation files. They are now the published `docs/` versions from `eecadb06`.
+The copies under Foundry project `docs/`, `Phase Mirror/docs/`, and `Phase Mirror/artifacts/` are synchronized with `f7da9c4`.

@@ -2,7 +2,7 @@
 
 Status: receipt. Re-ran the tree. Did not re-execute the MCP tool.
 Date: 2026-10-12
-Published anchor: PhaseMirror/phase-mirror-agent-dev `eecadb0689d5bacf3e1cd225a8d95740aa7fa429`
+Published anchor: PhaseMirror/phase-mirror-agent-dev `f7da9c446377bf35d5be31ed986cdd2a81d67b7b`
 
 ## Holds
 

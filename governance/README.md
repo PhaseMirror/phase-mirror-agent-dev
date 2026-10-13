@@ -1,6 +1,6 @@
 # Governance & P2-P3 Signature Verification (Lever H2)
 
-This directory documents the governance specification, key management, and detached signature verification architecture for the Phase Mirror repository, implementing the requirements specified in [`docs/P3 Signature.txt`](../docs/P3%20Signature.txt) and [`ADR_PM_AGENT_003`](../phase-mirror-gpt/ADR/003-archivum-lineage.md) (Track H, Lever H2).
+This directory documents the governance specification, key management, and detached signature verification architecture for the Phase Mirror repository, implementing the requirements specified in [`docs/P3 Signature.tex`](../docs/P3%20Signature.tex) and [`ADR_PM_AGENT_003`](../phase-mirror-gpt/ADR/003-archivum-lineage.tex) (Track H, Lever H2).
 
 ---
 
@@ -33,10 +33,10 @@ The `git verify` command is integrated directly into git via `.git/config` and `
 git verify
 
 # Verify a specific ADR document
-git verify phase-mirror-gpt/ADR/003-archivum-lineage.md
+git verify phase-mirror-gpt/ADR/003-archivum-lineage.tex
 
 # Machine-readable JSON output (verdict format)
-git verify --json phase-mirror-gpt/ADR/003-archivum-lineage.md
+git verify --json phase-mirror-gpt/ADR/003-archivum-lineage.tex
 
 # Strict mode: exits with non-zero code if any document remains 'Proposed'
 git verify --strict
@@ -53,13 +53,13 @@ git verify --check-unfreeze
 git verify --keygen p2_signer --signer "Alice (P2 Keyholder)"
 
 # 2. Sign a document detached
-git verify --sign phase-mirror-gpt/ADR/003-archivum-lineage.md --key p2_signer.key --signer "Alice (P2 Keyholder)"
+git verify --sign phase-mirror-gpt/ADR/003-archivum-lineage.tex --key p2_signer.key --signer "Alice (P2 Keyholder)"
 
 # 3. Sign with a second distinct keyholder
-git verify --sign phase-mirror-gpt/ADR/003-archivum-lineage.md --key p3_signer.key --signer "Bob (P3 Keyholder)"
+git verify --sign phase-mirror-gpt/ADR/003-archivum-lineage.tex --key p3_signer.key --signer "Bob (P3 Keyholder)"
 
 # 4. Verify document acceptance under Lever H2
-git verify phase-mirror-gpt/ADR/003-archivum-lineage.md
+git verify phase-mirror-gpt/ADR/003-archivum-lineage.tex
 ```
 
 ---

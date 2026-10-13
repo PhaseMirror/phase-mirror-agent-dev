@@ -1,0 +1,48 @@
+name: MCP Automation
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: Allowlisted command. Arbitrary cargo is refused.
+        required: true
+        type: choice
+        options:
+          - build
+          - test
+          - validate
+          - check-contract
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Run allowlisted command
+        run: |
+          case "${{ inputs.command }}" in
+            build)
+              cargo build -p phase-mirror-mcp --release
+              ;;
+            test)
+              cargo test -p phase-mirror-mcp
+              ;;
+            validate)
+              cargo check --workspace
+              cargo test --workspace
+              ;;
+            check-contract)
+              cargo test -p lexlean-stratum
+              ;;
+            *)
+              echo "refused: command is not allowlisted" >&2
+              exit 1
+              ;;
+          esac

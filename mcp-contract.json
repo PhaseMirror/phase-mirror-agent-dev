@@ -1,0 +1,20 @@
+{
+  "contract_metadata": {
+    "contract_id": "PM-MCP-001",
+    "schema_version": "1.0.0",
+    "sovereign_id": "PHASE-MIRROR-PRIMARY",
+    "valid_from": "2026-10-12T00:00:00Z",
+    "nonce": "1"
+  },
+  "governance_floor": {
+    "default_tier": "Authoritative",
+    "enforce_sealed_veto": true,
+    "escalation_triggers": []
+  },
+  "tool_policies": {},
+  "jubilee_window": {
+    "sync_required": true,
+    "max_thickness_delta": 0.05,
+    "checkpoint_ref": "REF-001"
+  }
+}

@@ -35,15 +35,28 @@ async fn main() -> io::Result<()> {
             }
         }
 
+        let cwd = std::env::current_dir()
+            .map(|p| p.to_string_lossy().to_string())
+            .unwrap_or_default();
+
         servers.insert(
             "phase-mirror-mcp".to_string(),
             json!({
+                "type": "stdio",
                 "command": command,
-                "args": []
+                "args": [],
+                "cwd": cwd,
+                "env": {
+                    "PHASE_MIRROR_ENV": "dev"
+                },
+                "tools": ["*"]
             }),
         );
 
         let updated = json!({ "mcpServers": servers });
+        if let Some(parent) = mcp_path.parent() {
+            std::fs::create_dir_all(parent)?;
+        }
         std::fs::write(&mcp_path, serde_json::to_string_pretty(&updated).unwrap())?;
         eprintln!("Registered phase-mirror-mcp in {}", mcp_path.display());
         return Ok(());

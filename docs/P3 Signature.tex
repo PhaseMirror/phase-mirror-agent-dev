@@ -1,0 +1,129 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\usepackage{newunicodechar}
+\usepackage{amssymb}
+\newunicodechar{λ}{\ensuremath{\lambda}}
+\newunicodechar{κ}{\ensuremath{\kappa}}
+\newunicodechar{σ}{\ensuremath{\sigma}}
+\newunicodechar{₁}{\ensuremath{_1}}
+\newunicodechar{‖}{\ensuremath{\Vert}}
+\newunicodechar{≤}{\ensuremath{\le}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{·}{\ensuremath{\cdot}}
+\newunicodechar{ℚ}{\ensuremath{\mathbb{Q}}}
+\newunicodechar{∈}{\ensuremath{\in}}
+\newunicodechar{…}{\ldots}
+\newunicodechar{§}{\S}
+\newunicodechar{—}{---}
+\newunicodechar{–}{--}
+\newunicodechar{’}{'}
+\newunicodechar{“}{``}
+\newunicodechar{”}{''}
+\newunicodechar{⁠}{}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+The ``two legal persons'' and ``second cryptographic identity''
+constraints have been separated into two distinct acts to prevent
+dissonance between document acceptance and runtime unfreeze logic.
+
+\hypertarget{document-accept-governance}{%
+\subsubsection{1. Document Accept
+(Governance)}\label{document-accept-governance}}
+
+This phase operates the H2 lever for ADR acceptance (e.g., ADR 003).
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Mechanism}: Two named persons, holding two distinct keys, each
+  sign the SHA-256 hash of the canonical ADR bytes.
+\item
+  \textbf{Storage}: Signatures stay detached. Do not append signatures
+  to the document body, as this would alter the signed bytes.
+\item
+  \textbf{State}: The document status remains \texttt{Proposed} until
+  both signatures verify.
+\item
+  \textbf{Owner}: The two key holders.
+\item
+  \textbf{Metric}: \texttt{git\ verify} or an equivalent
+  detached-signature check on that blob.
+\end{itemize}
+
+\hypertarget{runtime-unfreeze-engine-execution}{%
+\subsubsection{2. Runtime Unfreeze (Engine
+Execution)}\label{runtime-unfreeze-engine-execution}}
+
+\textbf{DO NOT RUN.}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Constraint}: No P\_2/P\_3 keygen, no out-of-band handshake, no
+  Sedona compile for a ProofHash, and no R3-FREEZE clear.
+\item
+  \textbf{Condition}: Execution is suspended until a public path names
+  the verifier, the freeze flag, and the proof object. That path does
+  not currently exist.
+\item
+  \textbf{Rationale}: A document-accept rule cannot be operated as a
+  runtime unfreeze. Sedona Spine as a certify stage is already Unbound
+  in the kiln register. A workflow file is not an engine that refuses
+  execution until two signatures arrive.
+\end{itemize}
+
+\end{document}

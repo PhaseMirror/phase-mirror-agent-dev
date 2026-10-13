@@ -1,0 +1,155 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\usepackage{newunicodechar}
+\usepackage{amssymb}
+\newunicodechar{λ}{\ensuremath{\lambda}}
+\newunicodechar{κ}{\ensuremath{\kappa}}
+\newunicodechar{σ}{\ensuremath{\sigma}}
+\newunicodechar{₁}{\ensuremath{_1}}
+\newunicodechar{‖}{\ensuremath{\Vert}}
+\newunicodechar{≤}{\ensuremath{\le}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{·}{\ensuremath{\cdot}}
+\newunicodechar{ℚ}{\ensuremath{\mathbb{Q}}}
+\newunicodechar{∈}{\ensuremath{\in}}
+\newunicodechar{…}{\ldots}
+\newunicodechar{§}{\S}
+\newunicodechar{—}{---}
+\newunicodechar{–}{--}
+\newunicodechar{’}{'}
+\newunicodechar{“}{``}
+\newunicodechar{”}{''}
+\newunicodechar{⁠}{}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\hypertarget{pm-mcp-002-option-3-joint-closure}{%
+\section{PM-MCP-002 --- Option 3 joint
+closure}\label{pm-mcp-002-option-3-joint-closure}}
+
+Status: applied, not a contract. Date: 2026-10-12 Repository:
+PhaseMirror/phase-mirror-agent-dev Head:
+\texttt{591dd42faee1d6f7cbe9952eba197b1faa6f7be0}
+
+\hypertarget{confirmed-gaps-now-closed}{%
+\subsection{Confirmed gaps, now
+closed}\label{confirmed-gaps-now-closed}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Action
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Target
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Verification
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Refuse PATH. Require \texttt{PRISMPM\_BIN} to be an absolute file whose
+SHA-256 equals a \texttt{prismpm} inventory digest in
+\texttt{prismpm.lock}. Require schema \texttt{prismpm/sdk-lock/2} and a
+digest-pinned \texttt{sdk\_image}. &
+\texttt{phase-mirror-mcp/src/tools/prismpm\_actions.rs} &
+\texttt{binary\_resolution\_refuses\_path\_and\_a\_mismatched\_digest},
+\texttt{undigested\_lock\_is\_refused} \\
+Bind evidence reads. \texttt{prismpm/sdk-lock/2} does not name an
+evidence directory, so the directory is \texttt{PRISMPM\_EVIDENCE\_DIR},
+not a caller argument and not an invented lock field. Accept only a
+single filename and resolve it inside that directory. & same file &
+traversal, absolute name, outside-file, and inside-file plants \\
+Connect in-tree verification-harness and CNL grammar parsing. Port
+\texttt{verification-harness} in-tree to eliminate external relative
+path breakages. Implement CNL command parsing and invariant checks in
+\texttt{cnl\_bridge}. & \texttt{phase-mirror-mcp/Cargo.toml},
+\texttt{phase-mirror-mcp/src/tools/governed\_bridge.rs},
+\texttt{phase-mirror-agent/src/cnl\_bridge.rs} & In-tree
+\texttt{crates/verification-harness} linked. Both MCP and Agent test
+suites pass. \\
+Publish the workspace package keys \texttt{phase-mirror-gpt} already
+inherits. & root \texttt{Cargo.toml} & \texttt{rust-version},
+\texttt{authors}, \texttt{license}, \texttt{repository},
+\texttt{homepage}, \texttt{description} \\
+\end{longtable}
+
+\texttt{cargo\ test\ -p\ phase-mirror-mcp\ -\/-lib\ tools::prismpm\_actions}
+: 7 passed, 0 failed. \texttt{cargo\ test\ -\/-workspace} : 114 passed,
+0 failed.
+
+\hypertarget{grounded-status}{%
+\subsection{Grounded status}\label{grounded-status}}
+
+The MCP lib tests compile and the seven plants pass. In-tree
+verification-harness evaluates governed bridge transitions. CNL
+compilation and Phase Mirror invariants are enforced in-tree. All 114
+tests across the workspace pass.
+
+\end{document}

@@ -1,0 +1,242 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\usepackage{newunicodechar}
+\usepackage{amssymb}
+\newunicodechar{λ}{\ensuremath{\lambda}}
+\newunicodechar{κ}{\ensuremath{\kappa}}
+\newunicodechar{σ}{\ensuremath{\sigma}}
+\newunicodechar{₁}{\ensuremath{_1}}
+\newunicodechar{‖}{\ensuremath{\Vert}}
+\newunicodechar{≤}{\ensuremath{\le}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{·}{\ensuremath{\cdot}}
+\newunicodechar{ℚ}{\ensuremath{\mathbb{Q}}}
+\newunicodechar{∈}{\ensuremath{\in}}
+\newunicodechar{…}{\ldots}
+\newunicodechar{§}{\S}
+\newunicodechar{—}{---}
+\newunicodechar{–}{--}
+\newunicodechar{’}{'}
+\newunicodechar{“}{``}
+\newunicodechar{”}{''}
+\newunicodechar{⁠}{}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\textless\textless\textless\textless\textless\textless\textless{} HEAD
+\# MCP automation
+
+Status: workflow contract. Published anchor:
+PhaseMirror/phase-mirror-agent-dev, branch \texttt{master}.
+
+\hypertarget{triggers}{%
+\subsection{Triggers}\label{triggers}}
+
+\texttt{.github/workflows/evolution.yml} runs on push to
+\texttt{master}, on a pull request targeting \texttt{master}, and on
+manual dispatch. It does not target \texttt{main}. The tree's branch is
+\texttt{master}.
+
+\texttt{.github/workflows/mcp-automation.yml} runs only on
+\texttt{workflow\_dispatch}.
+
+\hypertarget{validation-gates}{%
+\subsection{Validation gates}\label{validation-gates}}
+
+\texttt{evolution.yml} is hermetic. It runs, in order:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \texttt{cargo\ check\ -\/-workspace}
+\item
+  \texttt{cargo\ test\ -\/-workspace}
+\item
+  \texttt{cargo\ build\ -p\ phase-mirror-mcp\ -\/-release}
+\item
+  \texttt{cargo\ test\ -p\ phase-mirror-mcp}
+\end{enumerate}
+
+There is no \texttt{-\/-check-model} flag. The MCP binary does not
+accept one. There is no webhook, no \texttt{webhook.site} post, and no
+simulated payload. A step that posts to an external host and ignores
+failure is a simulation, and it is not in this workflow.
+
+\hypertarget{dispatch-commands}{%
+\subsection{Dispatch commands}\label{dispatch-commands}}
+
+\texttt{mcp-automation.yml} accepts one input, \texttt{command}, as a
+choice. The choices are \texttt{build}, \texttt{test},
+\texttt{validate}, and \texttt{check-contract}.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Command
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+What runs
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{build} &
+\texttt{cargo\ build\ -p\ phase-mirror-mcp\ -\/-release} \\
+\texttt{test} & \texttt{cargo\ test\ -p\ phase-mirror-mcp} \\
+\texttt{validate} & \texttt{cargo\ check\ -\/-workspace}, then
+\texttt{cargo\ test\ -\/-workspace} \\
+\texttt{check-contract} & \texttt{cargo\ test\ -p\ lexlean-stratum} \\
+\end{longtable}
+
+Anything else is refused. Arbitrary cargo from the dispatch input is not
+accepted. A free-text command would be shell injection, and it is not a
+gate.
+
+\hypertarget{boundaries}{%
+\subsection{Boundaries}\label{boundaries}}
+
+SPEC.md §34.0: the compiler's \texttt{seal\_hash} preimage is not
+recoverable. These workflows do not call
+\texttt{pirtm\_verify\_ensemble} and do not treat a PIRTM seal as a
+crate fixture.
+
+\hypertarget{adr-015-and-the-zero-simulation-rule-a-ci-step-that-cannot-fail-or-that-reports-a-result-it-did-not-compute-is-not-a-gate.-the-previous-evolution.yml-targeted-main-ran-a-flag-the-binary-does-not-have-and-posted-a-simulated-payload-to-webhook.site.-that-file-is-replaced.}{%
+\section{\texorpdfstring{ADR-015 and the zero-simulation rule: a CI step
+that cannot fail, or that reports a result it did not compute, is not a
+gate. The previous \texttt{evolution.yml} targeted \texttt{main}, ran a
+flag the binary does not have, and posted a simulated payload to
+\texttt{webhook.site}. That file is
+replaced.}{ADR-015 and the zero-simulation rule: a CI step that cannot fail, or that reports a result it did not compute, is not a gate. The previous evolution.yml targeted main, ran a flag the binary does not have, and posted a simulated payload to webhook.site. That file is replaced.}}\label{adr-015-and-the-zero-simulation-rule-a-ci-step-that-cannot-fail-or-that-reports-a-result-it-did-not-compute-is-not-a-gate.-the-previous-evolution.yml-targeted-main-ran-a-flag-the-binary-does-not-have-and-posted-a-simulated-payload-to-webhook.site.-that-file-is-replaced.}}
+
+\hypertarget{mcp-automation-workflow-setup}{%
+\section{MCP automation workflow
+setup}\label{mcp-automation-workflow-setup}}
+
+This repository now includes GitHub Actions automation for the Rust
+workspace and for the Phase Mirror MCP server.
+
+\hypertarget{included-workflows}{%
+\subsection{Included workflows}\label{included-workflows}}
+
+\hypertarget{phase-mirror-ci-mcp-validation-.githubworkflowsevolution.yml}{%
+\subsubsection{\texorpdfstring{1. Phase Mirror CI \& MCP validation
+(\texttt{.github/workflows/evolution.yml})}{1. Phase Mirror CI \& MCP validation (.github/workflows/evolution.yml)}}\label{phase-mirror-ci-mcp-validation-.githubworkflowsevolution.yml}}
+
+The primary continuous integration workflow gates all pushes and pull
+requests against \texttt{master}: - \textbf{Triggers}: - \texttt{push}
+to \texttt{master} - \texttt{pull\_request} targeting \texttt{master} -
+Manual execution via \texttt{workflow\_dispatch} - \textbf{Validation
+Gates}: - Full workspace syntax and type check:
+\texttt{cargo\ check\ -\/-workspace} - Workspace test suite execution:
+\texttt{cargo\ test\ -\/-workspace} (validates 187 tests, including
+\texttt{lexlean-stratum} contractivity and stratification witness) -
+Release build of MCP server:
+\texttt{cargo\ build\ -p\ phase-mirror-mcp\ -\/-release} - MCP
+integration test verification:
+\texttt{cargo\ test\ -p\ phase-mirror-mcp} - \textbf{Architectural
+Policy}: - Replaces legacy simulated webhook dispatches and mock
+\texttt{-\/-check-model} invocations with concrete, hermetic on-tree
+compilation and test execution (ADR-015, SPEC.md §34.0).
+
+\hypertarget{phase-mirror-mcp-automation-.githubworkflowsmcp-automation.yml}{%
+\subsubsection{\texorpdfstring{2. Phase Mirror MCP Automation
+(\texttt{.github/workflows/mcp-automation.yml})}{2. Phase Mirror MCP Automation (.github/workflows/mcp-automation.yml)}}\label{phase-mirror-mcp-automation-.githubworkflowsmcp-automation.yml}}
+
+On-demand operational automation for the Phase Mirror Model Context
+Protocol server: - \textbf{Triggers}: - \texttt{workflow\_dispatch} with
+parameter \texttt{command} - \textbf{Supported Commands}: -
+\texttt{build}: Compiles \texttt{phase-mirror-mcp} in release mode. -
+\texttt{test}: Executes the full 17-test MCP suite (\texttt{governance},
+\texttt{prismpm\_actions}, \texttt{stability\_witness},
+\texttt{runtime\_harness}, \texttt{stonehenge\_simulation}). -
+\texttt{validate}: Runs full release build followed by MCP and
+\texttt{lexlean-stratum} contractivity validation. -
+\texttt{check-contract}: Runs MCP contract governance harness. - Custom
+cargo subcommands passed to \texttt{phase-mirror-mcp}.
+
+\hypertarget{architectural-alignment}{%
+\subsection{Architectural Alignment}\label{architectural-alignment}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Ground Truth Invariant (ADR-015)}: Workflows execute physical
+  Rust crate binaries directly on the host toolchain without synthetic
+  mocks.
+\item
+  \textbf{Process Boundary Quarantine (SPEC.md §34.0)}: CI treats
+  \texttt{phase-mirror-mcp} as an integration boundary. Test suites
+  preserve exact rational norm bounds without introducing float literals
+  or fake receipts into \texttt{lexlean-stratum}.
+  \textgreater\textgreater\textgreater\textgreater\textgreater\textgreater\textgreater{}
+  0d2abf2 (Refactor CI workflows: update evolution.yml for master branch
+  and add mcp-automation.yml for on-demand automation commands)
+\end{itemize}
+
+\end{document}

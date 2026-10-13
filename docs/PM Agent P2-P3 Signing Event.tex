@@ -1,0 +1,156 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\usepackage{newunicodechar}
+\usepackage{amssymb}
+\newunicodechar{λ}{\ensuremath{\lambda}}
+\newunicodechar{κ}{\ensuremath{\kappa}}
+\newunicodechar{σ}{\ensuremath{\sigma}}
+\newunicodechar{₁}{\ensuremath{_1}}
+\newunicodechar{‖}{\ensuremath{\Vert}}
+\newunicodechar{≤}{\ensuremath{\le}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{·}{\ensuremath{\cdot}}
+\newunicodechar{ℚ}{\ensuremath{\mathbb{Q}}}
+\newunicodechar{∈}{\ensuremath{\in}}
+\newunicodechar{…}{\ldots}
+\newunicodechar{§}{\S}
+\newunicodechar{—}{---}
+\newunicodechar{–}{--}
+\newunicodechar{’}{'}
+\newunicodechar{“}{``}
+\newunicodechar{”}{''}
+\newunicodechar{⁠}{}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+The P2--P3 signing event is a cryptographic phase-transition receipt in
+the Phase Mirror agent stack. It binds an advance from an intermediate
+governed state (P2: preparation, validation, intermediate commitment, or
+scaffolding-checked intermediate) to a subsequent effectuation or final
+binding state (P3) under the L0 contractive kernel. It is not a
+free-form agent step; it is an on-tree, signed commitment consistent
+with LexLean's closed-lexicon ledger and PIRTM's small-gain
+discipline.⁠GitHub Purpose In the Foundry L0 base-state (Civic R\&D
+workshop using phase-mirror methodology), agent actions and tool
+sequences must remain contractive: \(\|G\|_1 < 1\) in \(\mathbb{Q}\),
+with every claim linked to a physically existing, tested artifact
+(ADR-015 on-tree ground truth). The signing event produces a
+non-repudiable head or seal that:
+
+Signs the TreeHead (or equivalent agent-state head) with the log key,
+per LexLean §33.3. Append operations publish a signed head that commits
+the tree size, root hash, and consistency proof from the predecessor.
+This is the mechanism that landed with WP-2 (published main 62039abd).
+The signature covers the content digest; the inclusion proof covers the
+leaf bytes. A verifier checks the proof against the entry with inclusion
+omitted.⁠GitHub Distinguishes three hashes that must not be collapsed:
+the receipt itself, the snapaddr, and any PIRTM seal. These remain
+process-boundary evidence; the compiler preimage is not recoverable
+inside the crate (SPEC §34.0). Anchors the transition so that subsequent
+MCP tools (e.g., prismpm\_model\_check, prismpm\_generate,
+prismpm\_verify, prismpm\_evidence\_read) or LexLean stratum atoms
+resolve only against digest-pinned binaries and lock inventories. PATH
+fallbacks and external harness paths are refused. Surfaces and resolves
+dissonance at the phase boundary rather than allowing the agent to
+self-report progress. The event is the concrete binding artifact that
+replaces informal ``align'' or ``proceed'' language.
+
+This matches the broader Phase Mirror joint pattern: LexLean authors the
+closed CNL snapshot; PIRTM/MOC supplies the L0 contractive kernel;
+Sedona Spine provides the dual-layer Sentinel (static small-gain +
+WardMonitor). The signing event is the agent-local realization of that
+joint. Implications
+
+Non-repudiation and auditability. Downstream verifiers (CI, Hologram
+Live oracle, external FreeTSA RFC 3161 witnesses, or independent
+oracles) can confirm the transition without trusting the agent process.
+Signed heads are published alongside the log; consistency proofs allow
+prefix verification. Scaffolding constants (e.g., earlier
+PIRTM\_MCP\_SEAL\_HASH length checks) have been removed in favor of
+HASH\_AUTHORITY bindings such as lexlean-contractivity-v1. Contractivity
+preservation. The transition cannot increase the induced gain above the
+rational bound. Stratification remains stratification, not substitution:
+dropping the PIRTM layer must leave every §33 check bit-identical. The
+event therefore cannot introduce new sorry or open axioms. Refusal of
+simulation. CI gates (evolution.yml on master, mcp-automation.yml
+allowlist) and agent tooling refuse unsigned, mismatched, or simulated
+results. A step that cannot fail, or that reports a result it did not
+compute, is not a gate. The signing event is the positive counterpart:
+it only fires when the prior phase's receipts and digests match. Agent
+governance boundary. For the Phase Mirror agent (phase-mirror-agent /
+phase-mirror-mcp workspace), this binds tool registration and action
+effectuation. PrismPM SDK functions exposed as MCP tools remain
+consumers of a locked, digest-pinned binary; they do not fold into the
+agent workspace. Evidence directories are bound explicitly because the
+sdk-lock schema does not name them. The event therefore keeps generic
+SDK capabilities upstream while making the agent's consumption of them
+receipt-gated. Civic and workshop consequences. In the Foundry model,
+dynamic social infrastructures and solutions are developed through
+phase-mirrored, evidence-backed transitions rather than opaque autonomy.
+A signed P2→P3 advance is a durable, reproducible artifact that can be
+mirrored, audited, or sealed to Archivum. It supports the honesty ledger
+pattern (sorry-honesty manifests, claim tables pointing at open axioms
+where they remain) and keeps UOR Foundation as one organization on the
+platform, not a privileged identity.
+
+In short, the event converts a phase boundary into a verifiable,
+contractive commitment. It is the agent-facing counterpart of LexLean's
+signed TreeHeads and PIRTM's process-boundary seals: purpose is binding
+the transition under the L0 kernel; implication is that subsequent agent
+actions inherit an auditable, non-simulated, small-gain-preserving
+prefix.
+
+\end{document}

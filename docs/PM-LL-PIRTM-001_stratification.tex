@@ -1,0 +1,251 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\usepackage{newunicodechar}
+\usepackage{amssymb}
+\newunicodechar{λ}{\ensuremath{\lambda}}
+\newunicodechar{κ}{\ensuremath{\kappa}}
+\newunicodechar{σ}{\ensuremath{\sigma}}
+\newunicodechar{₁}{\ensuremath{_1}}
+\newunicodechar{‖}{\ensuremath{\Vert}}
+\newunicodechar{≤}{\ensuremath{\le}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{·}{\ensuremath{\cdot}}
+\newunicodechar{ℚ}{\ensuremath{\mathbb{Q}}}
+\newunicodechar{∈}{\ensuremath{\in}}
+\newunicodechar{…}{\ldots}
+\newunicodechar{§}{\S}
+\newunicodechar{—}{---}
+\newunicodechar{–}{--}
+\newunicodechar{’}{'}
+\newunicodechar{“}{``}
+\newunicodechar{”}{''}
+\newunicodechar{⁠}{}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\hypertarget{pm-ll-pirtm-001-pirtm-and-lexlean-stratification-not-substitution}{%
+\section{PM-LL-PIRTM-001 --- PIRTM and LexLean, stratification not
+substitution}\label{pm-ll-pirtm-001-pirtm-and-lexlean-stratification-not-substitution}}
+
+Status: receipt, not a new contract. Date: 2026-10-12
+
+\hypertarget{three-languages-one-joint}{%
+\subsection{Three languages, one
+joint}\label{three-languages-one-joint}}
+
+LexLean's authoring language is a closed-lexicon CNL. Every word,
+symbol, and control is declared by a versioned lexicon package, one
+typed IR emits canonical LaTeX and prose-free Lean, and \texttt{SPEC.md}
+is the contract. It is not ALP.
+
+PIRTM/MOC is the L0 contractive kernel. The predicate LexLean checked
+against the observed compiler is \texttt{‖A·diag(λ)‖₁\ \textless{}\ 1}
+in exact rationals. The compiler does not factor a term into
+prime-irreducible components, and \texttt{prime=} is a stratum selector
+it does not even require to be prime.
+
+\texttt{pirtm-apps} CNL compilation is a third thing. On
+\texttt{phase-mirror-agent-dev} it is a closed refusal: the crate is
+outside the workspace, and the agent does not become that compiler.
+
+\hypertarget{what-spec.md-already-decided}{%
+\subsection{What SPEC.md already
+decided}\label{what-spec.md-already-decided}}
+
+§34 is the joint. It models a lexeme's declarations as atoms of a
+stratum, reproduces the observed contractivity predicate, and carries
+the norm as an exact \texttt{{[}numerator,\ denominator{]}} pair.
+
+§34.3 records a Zeno-Finton signal as
+\texttt{κ(index)\ =\ 2\^{}(-index)}. It carries no legal weight. The RFC
+3161 timestamp remains the only time anchor, because a timestamp is
+meaningful only when it comes from an authority the author does not
+control.
+
+§34.4 is the load-bearing sentence: dropping every field this section
+defines must leave every §33 check and the §33.6 verdict bit-identical.
+An entry that omits the layer is a valid §33 entry. That is
+stratification. Substitution would break it first.
+
+The receipt hash is a LexLean hash under
+\texttt{lexlean-contractivity-v1}. It is not the compiler's
+\texttt{seal\_hash}, and an entry says which of the two it carries.
+
+\hypertarget{what-not-to-explore}{%
+\subsection{What not to explore}\label{what-not-to-explore}}
+
+\texttt{0000-PIRTM\ LEXLEAN.md} proposes replacing the SHA-256 identity,
+the RFC 6962 inclusion proof, the browser transcription, and the FreeTSA
+timestamp with PIRTM primitives. §34 refuses the last of those outright
+and does not claim the first three. Prime-indexed identity, a
+contractivity receipt in place of an inclusion proof, and an internal
+temporal anchor are literature claims the observed compiler does not
+compute.
+
+\hypertarget{the-next-witness-if-one-is-wanted}{%
+\subsection{The next witness, if one is
+wanted}\label{the-next-witness-if-one-is-wanted}}
+
+Hand a LexLean snapshot's declaration graph to PIRTM as atoms of a
+stratum. Take back a receipt whose norm is an exact rational. Store it
+as a §34 supplementary field. Re-run §33 and require the verdict to be
+bit-identical with the field removed.
+
+That is the integration. A merged ALP/CNL compiler, or a PIRTM binary
+inside LexLean, is a different project and a forked reading of §34.4.
+
+\hypertarget{executed-witness-2026-10-12}{%
+\subsection{Executed Witness
+(2026-10-12)}\label{executed-witness-2026-10-12}}
+
+The witness described above is executed and physically in-tree: -
+\textbf{Crate}: \texttt{crates/lexlean-stratum} - \textbf{Witness Test}:
+\texttt{tests/stratification\_witness.rs} - \textbf{Conformance Suite}:
+\texttt{tests/conformance\_lp.rs} (LP-01 through LP-12 passing) -
+\textbf{Toolchain Invariant}: Lean 4 \texttt{leanprover/lean4:v4.32.1},
+LexLean version \texttt{1.0}
+
+\hypertarget{witness-metrics}{%
+\subsubsection{Witness Metrics}\label{witness-metrics}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Snapshot Stratum}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Source:
+    \texttt{def\ a\ :\ Nat\ :=\ 1\textbackslash{}ndef\ b\ :\ Nat\ :=\ a\textbackslash{}n}
+  \item
+    Atoms: \texttt{a} (\(t_a = 5\)), \texttt{b} (\(t_b = 5\))
+  \item
+    Contraction factors: \(\lambda_a = 1/(1+5) = 1/6\),
+    \(\lambda_b = 1/(1+5) = 1/6\)
+  \item
+    Adjacency matrix:
+    \[A = \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}\]
+  \end{itemize}
+\item
+  \textbf{PIRTM Contractivity}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Operator coupling:
+    \(G = A \cdot \mathrm{diag}(\lambda) = \begin{pmatrix} 0 & 0 \\ 1/6 & 0 \end{pmatrix}\)
+  \item
+    Rational 1-norm: \(\|G\|_1 = \max(1/6, 0) = 1/6 < 1\)
+  \item
+    Rational representation: exact pair \([1, 6] \in \mathbb{Q}\) (zero
+    floating-point values)
+  \item
+    Evaluated via live MCP tool \texttt{pirtm\_verify\_ensemble}:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \texttt{status}: \texttt{ACCEPT}
+    \item
+      \texttt{is\_norm\_contractive}: \texttt{true}
+    \item
+      \texttt{exact\_rational\_norm\_1}: \texttt{{[}1,\ 6{]}}
+    \item
+      \texttt{seal\_hash}:
+      \texttt{a7b91766d4d36cb411d83d41dc3d465b5a5fe04b2ae6b698c1e54ade57c595d7}
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{§34 Supplementary Layer}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{snapaddr}:
+    \texttt{6b16a39b5e4751a8950d30e013c6bff7d1b0eaee91f8a8f49fee2d20ee546766}
+  \item
+    \texttt{prime\_index}: \texttt{2} (least prime \(\ge 2\))
+  \item
+    \texttt{contractivity}: \texttt{ContractivityReceipt} (domain:
+    \texttt{lexlean-contractivity-v1}, norm: \([1, 6]\), status:
+    \texttt{ACCEPT})
+  \item
+    \texttt{zeno\_finton}: \texttt{ZenoFinton::at(0)}
+    (\(\kappa(0) = 1\))
+  \end{itemize}
+\item
+  \textbf{§34.4 Additive Stratification Invariance}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Base entry signed with Ed25519 and committed to Merkle ledger.
+  \item
+    \texttt{layered.leaf\_bytes()\ ==\ bare.leaf\_bytes()} verified
+    bit-identical.
+  \item
+    \texttt{verify\_entry(\&layered,\ \&ledger)\ ==\ verify\_entry(\&bare,\ \&ledger)}
+    verified bit-identical across all 5 checks and final verdict
+    statement.
+  \item
+    Detaching \texttt{entry.pirtm\ =\ None} produces the exact
+    bit-for-bit unstratified base entry.
+  \end{itemize}
+\end{enumerate}
+
+\end{document}

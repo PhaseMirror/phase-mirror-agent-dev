@@ -1,0 +1,159 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\usepackage{newunicodechar}
+\usepackage{amssymb}
+\newunicodechar{λ}{\ensuremath{\lambda}}
+\newunicodechar{κ}{\ensuremath{\kappa}}
+\newunicodechar{σ}{\ensuremath{\sigma}}
+\newunicodechar{₁}{\ensuremath{_1}}
+\newunicodechar{‖}{\ensuremath{\Vert}}
+\newunicodechar{≤}{\ensuremath{\le}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{·}{\ensuremath{\cdot}}
+\newunicodechar{ℚ}{\ensuremath{\mathbb{Q}}}
+\newunicodechar{∈}{\ensuremath{\in}}
+\newunicodechar{…}{\ldots}
+\newunicodechar{§}{\S}
+\newunicodechar{—}{---}
+\newunicodechar{–}{--}
+\newunicodechar{’}{'}
+\newunicodechar{“}{``}
+\newunicodechar{”}{''}
+\newunicodechar{⁠}{}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\hypertarget{pm-mcp-001-phase-mirror-of-the-option-3-tool-report}{%
+\section{PM-MCP-001 --- Phase mirror of the Option 3 tool
+report}\label{pm-mcp-001-phase-mirror-of-the-option-3-tool-report}}
+
+Status: receipt, not a contract. No pull request. Date: 2026-10-08
+Published anchor checked: PhaseMirror/PhaseMirror \texttt{main}
+\texttt{d3b384cb65b0a133919b1238cfb5061e9738dbf6} (2026-09-13)
+
+\hypertarget{reported-not-on-that-ref}{%
+\subsection{Reported, not on that ref}\label{reported-not-on-that-ref}}
+
+The report says the root \texttt{Cargo.toml} members were restored to
+\texttt{{[}"crates/*",\ "xtask"{]}},
+\texttt{phase-mirror-agent/Cargo.toml} again has a
+\texttt{{[}workspace{]}} directive, and
+\texttt{phase-mirror-mcp/src/tools/prismpm\_actions.rs} wraps a
+\texttt{prismpm} process for:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{prismpm\_model\_check}
+\item
+  \texttt{prismpm\_generate}
+\item
+  \texttt{prismpm\_verify}
+\item
+  \texttt{prismpm\_evidence\_read}
+\end{itemize}
+
+routed from \texttt{legacy\_tool\_handler} and advertised in both
+initialize responses.
+
+On the published tree, \texttt{phase-mirror-mcp/src/tools/} contains
+\texttt{evaluate\_esi\_risk.rs}, \texttt{governed\_bridge.rs},
+\texttt{litigation\_scan.rs}, \texttt{llm\_generate.rs},
+\texttt{mod.rs}, \texttt{spoliation\_check.rs},
+\texttt{stability\_witness.rs}, and \texttt{verify\_ledger.rs}.
+\texttt{prismpm\_actions.rs} is absent. A code search for
+\texttt{prismpm\_model\_check} and \texttt{prismpm\_evidence\_read}
+returns nothing on UOR-Foundation or PhaseMirror. There is no root
+\texttt{Cargo.toml} on that ref. \texttt{phase-mirror-agent/Cargo.toml}
+does contain an empty \texttt{{[}workspace{]}} table; that line alone
+does not show a revert.
+
+The published MCP crate also depends on
+\texttt{../../../Foundry/tests/verification-harness}, a path outside the
+repository. That tree does not build as a closed workspace.
+
+\hypertarget{what-would-close-the-joint}{%
+\subsection{What would close the
+joint}\label{what-would-close-the-joint}}
+
+Process invocation is the right shape only if the unpublished file does
+all of the following:
+
+\begin{itemize}
+\tightlist
+\item
+  The \texttt{prismpm} binary is the one named by \texttt{prismpm.lock}
+  in the digest-pinned devcontainer, not the first \texttt{prismpm} on
+  \texttt{PATH}.
+\item
+  The argument vector is a closed set. A tool does not accept a
+  free-form subcommand.
+\item
+  \texttt{prismpm\_evidence\_read} reads only the evidence directory the
+  lock names. An arbitrary path is a socket the joint does not have.
+\item
+  The MCP binary links no PrismPM crate and contains no compiler
+  methodology of its own.
+\item
+  A plant that points the tool at a different binary, or that asks
+  \texttt{evidence\_read} for a path outside the evidence directory,
+  fails.
+\end{itemize}
+
+Until that file is on a published ref and those plants exist, Option 3
+is the adopted joint and not a landed implementation.
+
+\end{document}

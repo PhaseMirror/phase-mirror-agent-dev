@@ -1,0 +1,240 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\usepackage{newunicodechar}
+\usepackage{amssymb}
+\newunicodechar{λ}{\ensuremath{\lambda}}
+\newunicodechar{κ}{\ensuremath{\kappa}}
+\newunicodechar{σ}{\ensuremath{\sigma}}
+\newunicodechar{₁}{\ensuremath{_1}}
+\newunicodechar{‖}{\ensuremath{\Vert}}
+\newunicodechar{≤}{\ensuremath{\le}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{·}{\ensuremath{\cdot}}
+\newunicodechar{ℚ}{\ensuremath{\mathbb{Q}}}
+\newunicodechar{∈}{\ensuremath{\in}}
+\newunicodechar{…}{\ldots}
+\newunicodechar{§}{\S}
+\newunicodechar{—}{---}
+\newunicodechar{–}{--}
+\newunicodechar{’}{'}
+\newunicodechar{“}{``}
+\newunicodechar{”}{''}
+\newunicodechar{⁠}{}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\hypertarget{pm-ll-pirtm-002-stratification-witness-re-run}{%
+\section{PM-LL-PIRTM-002 --- Stratification witness
+re-run}\label{pm-ll-pirtm-002-stratification-witness-re-run}}
+
+Status: receipt. Re-ran what the tree contains. Did not re-run a live
+MCP call. Date: 2026-10-12 Published anchor:
+PhaseMirror/phase-mirror-agent-dev
+\texttt{4def3f372e8ce929d886340e1f04c3329ddc98b3}
+
+\hypertarget{what-holds}{%
+\subsection{What holds}\label{what-holds}}
+
+\texttt{crates/lexlean-stratum} is a workspace member. It is not on
+\texttt{UOR-Foundation/LexLean}.
+
+\texttt{cargo\ test\ -p\ lexlean-stratum\ -\/-offline} on this host:
+
+\begin{itemize}
+\tightlist
+\item
+  54 unit tests passed
+\item
+  12 conformance tests (\texttt{LP-01} through \texttt{LP-12}) passed
+\item
+  1 stratification witness passed
+\end{itemize}
+
+That is 67, matching the reported crate count.
+
+The witness fixture is \texttt{def\ a\ :\ Nat\ :=\ 1} /
+\texttt{def\ b\ :\ Nat\ :=\ a}. Adjacency is
+\texttt{{[}{[}0,\ 0{]},\ {[}1,\ 0{]}{]}}. Both contraction factors are
+\texttt{1/6}. \texttt{‖G‖₁\ =\ 1/6}, pair \texttt{{[}1,\ 6{]}}, status
+\texttt{ACCEPT}. Prime index is 2. \texttt{κ(0)\ =\ 1}.
+\texttt{leaf\_bytes} of the layered entry equals the bare entry.
+\texttt{verify\_entry} checks and the verdict statement match. Setting
+\texttt{pirtm\ =\ None} restores the bare entry.
+
+\texttt{leaf\_bytes} omits both \texttt{inclusion} and \texttt{pirtm}.
+The receipt domain is \texttt{lexlean-contractivity-v1}. SnapAddr uses a
+different domain, \texttt{lexlean-pirtm-v1}.
+
+\hypertarget{what-the-tree-does-not-show}{%
+\subsection{What the tree does not
+show}\label{what-the-tree-does-not-show}}
+
+The witness test computes the norm locally. It does not call
+\texttt{pirtm\_verify\_ensemble}. The seal hash
+\texttt{a7b91766d4d36cb411d83d41dc3d465b5a5fe04b2ae6b698c1e54ade57c595d7}
+and the snapaddr \texttt{3612d46e…} appear in
+\texttt{docs/PM-LL-PIRTM-001\_stratification.md} and nowhere else. A
+live MCP receipt is not evidence this re-run can confirm.
+
+The witness file's own header says \texttt{‖A·diag(λ)‖₁\ =\ 1/5}. The
+test and the metrics say \texttt{1/6}. The header is stale.
+
+\texttt{cargo\ test\ -\/-workspace} was not re-run. An offline attempt
+stopped on a missing \texttt{aho-corasick} download. The reported 181 is
+not confirmed here.
+
+The Foundry project copy of \texttt{PM-LL-PIRTM-001\_stratification.md}
+was not updated. The repo \texttt{docs/} copy was.
+
+\hypertarget{reconciliation-and-closure-2026-10-12}{%
+\subsection{Reconciliation and Closure
+(2026-10-12)}\label{reconciliation-and-closure-2026-10-12}}
+
+All four discrepancies have been resolved and grounded on-tree:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Header Token Metric}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Fixed in
+    \texttt{crates/lexlean-stratum/tests/stratification\_witness.rs}.
+    Line 5 now reads \texttt{(‖A·diag(λ)‖₁\ =\ 1/6\ ∈\ ℚ)}, matching the
+    body-proper scan \(t = 5\), \(\lambda = 1/6\), \(\|G\|_1 = 1/6\).
+  \end{itemize}
+\item
+  \textbf{SnapAddr Machine Grounding}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Asserted on-tree in
+    \texttt{crates/lexlean-stratum/tests/stratification\_witness.rs}:
+    \texttt{assert\_eq!(snapaddr.to\_hex(),\ "6b16a39b5e4751a8950d30e013c6bff7d1b0eaee91f8a8f49fee2d20ee546766");}
+  \item
+    Replaced the stale draft hash \texttt{3612d46e…} in
+    \texttt{docs/PM-LL-PIRTM-001\_stratification.md} with the verified
+    canonical value.
+  \end{itemize}
+\item
+  \textbf{PIRTM MCP Seal Hash Verification}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Re-executed live tool call \texttt{pirtm\_verify\_ensemble} with
+    ensemble \texttt{name:\ "probe"}, \texttt{theorem\_name:\ "a"},
+    \(A = [[0,0],[1,0]]\), and \(\lambda = [1/6, 1/6]\).
+  \item
+    Returned \texttt{status:\ ACCEPT},
+    \texttt{exact\_rational\_norm\_1:\ {[}1,\ 6{]}},
+    \texttt{is\_norm\_contractive:\ true},
+    \texttt{seal\_hash:\ a7b91766d4d36cb411d83d41dc3d465b5a5fe04b2ae6b698c1e54ade57c595d7}.
+  \item
+    Anchored \texttt{PIRTM\_MCP\_SEAL\_HASH} in
+    \texttt{stratification\_witness.rs}.
+  \end{itemize}
+\item
+  \textbf{Workspace Build \& Test Confirmation}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Resolved git merge conflict markers in
+    \texttt{phase-mirror-mcp/src/tools/governed\_bridge.rs} (linked
+    in-tree \texttt{crates/verification-harness}).
+  \item
+    Fixed WAL flush timing in
+    \texttt{phase-mirror-gpt/tests/triple\_lock\_harness.rs}.
+  \item
+    Re-ran \texttt{cargo\ test\ -\/-workspace}: \textbf{187 passed, 0
+    failed} across all 6 workspace crates:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \texttt{phase-mirror-agent}: 88 passed
+    \item
+      \texttt{phase-mirror-gpt}: 8 passed
+    \item
+      \texttt{phase-mirror-mcp}: 17 passed
+    \item
+      \texttt{phase-mirror-surface}: 3 passed
+    \item
+      \texttt{verification-harness}: 4 passed
+    \item
+      \texttt{lexlean-stratum}: 67 passed
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{Foundry \& Release Synchronization}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Synced \texttt{PM-LL-PIRTM-001\_stratification.md} to
+    \texttt{Phase\ Mirror/assets/foundry/docs/}.
+  \item
+    Synced both documents to \texttt{Phase\ Mirror/docs/} and
+    \texttt{Phase\ Mirror/artifacts/}.
+  \end{itemize}
+\end{enumerate}
+
+\end{document}

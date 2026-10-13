@@ -1,0 +1,165 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\usepackage{newunicodechar}
+\usepackage{amssymb}
+\newunicodechar{λ}{\ensuremath{\lambda}}
+\newunicodechar{κ}{\ensuremath{\kappa}}
+\newunicodechar{σ}{\ensuremath{\sigma}}
+\newunicodechar{₁}{\ensuremath{_1}}
+\newunicodechar{‖}{\ensuremath{\Vert}}
+\newunicodechar{≤}{\ensuremath{\le}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{·}{\ensuremath{\cdot}}
+\newunicodechar{ℚ}{\ensuremath{\mathbb{Q}}}
+\newunicodechar{∈}{\ensuremath{\in}}
+\newunicodechar{…}{\ldots}
+\newunicodechar{§}{\S}
+\newunicodechar{—}{---}
+\newunicodechar{–}{--}
+\newunicodechar{’}{'}
+\newunicodechar{“}{``}
+\newunicodechar{”}{''}
+\newunicodechar{⁠}{}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\hypertarget{local-tree-scope-correction-2026-10-04}{%
+\section{Local-tree scope correction ---
+2026-10-04}\label{local-tree-scope-correction-2026-10-04}}
+
+Status: operator attestation. Repo unnamed. SHA unnamed. Not A1. Not the
+LexLean PIRTM session.
+
+Public search: \texttt{ADR-073}, \texttt{ADR-074},
+\texttt{phase-mirror-surface}, \texttt{Adapter\_Fidelity\_Report} have
+no hits. \texttt{PhaseMirror/PIRTM} @ \texttt{ea5ba264} has
+\texttt{rust/pirtm-monitor}, not
+\texttt{packages/PIRTM/rust/pirtm-monitor}. Path prefix does not match.
+That public crate is not the third copy named here.
+
+\hypertarget{attested-split}{%
+\subsection{Attested split}\label{attested-split}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Path
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Operator scope
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\texttt{packages/PIRTM/rust/pirtm-monitor/**} & local-only; dropped from
+count \\
+\texttt{packages/multiplicity-crypto/docs/ADR-073-Contractivity-Gate.md}
+& local-only; G3 travels with it \\
+\texttt{packages/multiplicity-crypto/docs/ADR-074-LawfulRecursionHash.md}
+& local-only; §7 prohibition source \\
+\texttt{packages/multiplicity-crypto/ts/src/feedback.ts} & local-only;
+G3 implementation \\
+\texttt{packages/Cargo.toml} member \texttt{phase-mirror-surface} &
+claimed on main; directory absent on main and on both mounts \\
+\end{longtable}
+
+§7 split accepted as a label rule: placeholders on main are visible
+drift. The ADR-074 ban on \texttt{{[}computed\ on\ commit{]}} is not on
+main, so it cannot back the citation. Inline correction in artifacts
+that are themselves off main does not travel.
+
+\texttt{8a0b6d9a} is a short SHA with no repo.
+
+\hypertarget{n-2}{%
+\subsection{N-2}\label{n-2}}
+
+Not issued in this thread. Operator restatement, recorded as such: a
+pass of \texttt{‖A‖\_op\ ≤\ ‖A‖\_F\ ≤\ C\_MAX} is non-strict. If the
+name says spectral, the code must return \texttt{σ\_max}. Relabeling a
+Frobenius \texttt{f64} is the same defect one layer down. Frobenius
+\texttt{≤\ C\_MAX} is a sufficient condition for spectral
+\texttt{≤\ C\_MAX}. It is not the spectral value. Fail of Frobenius is
+not fail of spectral.
+
+\hypertarget{stop}{%
+\subsection{Stop}\label{stop}}
+
+\texttt{run\_certification} at \texttt{src/main.rs:6} attested as
+print-and-exit. Not a ledger wire. §9 items 1, 2, 5 stay open. No
+harness until they close. Decaying \texttt{κ} in \texttt{λ\_p} stays
+unauthorized. §10 non-authorization untouched.
+
+\hypertarget{truncated-phrase}{%
+\subsection{Truncated phrase}\label{truncated-phrase}}
+
+``port in the Phase Mirror crate'' was not sent in this thread. It is
+not assigned to \texttt{Adapter\_Fidelity\_Report.md} or
+\texttt{l0\_invariants.rs}. Both may be checked as their own rows if
+named. Neither is the referent of an absent sentence.
+
+\end{document}

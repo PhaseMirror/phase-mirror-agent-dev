@@ -1,0 +1,127 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\usepackage{newunicodechar}
+\usepackage{amssymb}
+\newunicodechar{λ}{\ensuremath{\lambda}}
+\newunicodechar{κ}{\ensuremath{\kappa}}
+\newunicodechar{σ}{\ensuremath{\sigma}}
+\newunicodechar{₁}{\ensuremath{_1}}
+\newunicodechar{‖}{\ensuremath{\Vert}}
+\newunicodechar{≤}{\ensuremath{\le}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{·}{\ensuremath{\cdot}}
+\newunicodechar{ℚ}{\ensuremath{\mathbb{Q}}}
+\newunicodechar{∈}{\ensuremath{\in}}
+\newunicodechar{…}{\ldots}
+\newunicodechar{§}{\S}
+\newunicodechar{—}{---}
+\newunicodechar{–}{--}
+\newunicodechar{’}{'}
+\newunicodechar{“}{``}
+\newunicodechar{”}{''}
+\newunicodechar{⁠}{}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\hypertarget{pm-mcp-004-ci-closure}{%
+\section{PM-MCP-004 --- CI closure}\label{pm-mcp-004-ci-closure}}
+
+Status: receipt. Remote runner observed. Date: 2026-10-13 Published
+anchor: PhaseMirror/phase-mirror-agent-dev
+\texttt{b1c7f25832d09dc0d60eae228794504d17b28b5e}
+
+\hypertarget{files}{%
+\subsection{Files}\label{files}}
+
+\texttt{evolution.yml} SHA-256
+\texttt{fe127305cd2e180bda395441403b8b1c187a71c5b7f68014778ee86c58eb613c}.
+No conflict markers. Four cargo gates on \texttt{master}.
+
+\texttt{mcp-automation.yml} SHA-256
+\texttt{b247828e11ac5eff23682de619a0cfe4c5af974afb3f403294a8ac06339f3a4d}.
+Choice allowlist. \texttt{check-contract} runs \texttt{runtime\_harness}
+and \texttt{lexlean-stratum}. \texttt{*)} exits 1. No command
+interpolation.
+
+\hypertarget{remote-run}{%
+\subsection{Remote run}\label{remote-run}}
+
+\href{https://github.com/PhaseMirror/phase-mirror-agent-dev/actions/runs/38344783887}{Phase
+Mirror CI \& MCP validation \#5} on \texttt{b1c7f258}, push, completed,
+success, 1m 54s.
+
+All four cargo steps succeeded:
+
+\begin{itemize}
+\tightlist
+\item
+  Check Workspace
+\item
+  Run Workspace Tests: 54 + 12 + 1 + 88 + 8 + 17 + 3 + 4 = 187
+\item
+  Build Phase Mirror MCP Server (Release)
+\item
+  Run MCP Server Test Suite: 17
+\end{itemize}
+
+\hypertarget{stale-receipt}{%
+\subsection{Stale receipt}\label{stale-receipt}}
+
+\texttt{PM-MCP-003} §3 says the conflict markers are an open defect at
+\texttt{095fbf04}. That defect is closed at \texttt{b1c7f258}. The line
+is historical for that receipt, not a current defect.
+
+\end{document}

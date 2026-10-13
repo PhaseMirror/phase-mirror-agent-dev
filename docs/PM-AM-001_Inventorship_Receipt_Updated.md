@@ -32,6 +32,12 @@
 | Semantic ID | `600f92bcbd3a96aee14922f1cff22b4616bcb7df84625af245f1a609d1f7c93b` |
 | Source ID | `d8743aefc1c7d166b96d8d6b90911bea5478fc9e3d4c82be7f4809c52886810b` |
 | Build ID | `31a993428b9760d880a7e91b9a558006d373625ea4a6678e66a2095b18405f1f` |
+| Hologram v4 Archive SHA-256 (`ancient_mint.holo`) | `87f1e95f18a037b2c46c8bf25c056238f2a3b108d2adc689892b57e938ba111c` |
+| Hologram v4 Archive Kappa | `blake3:038cfd8711b31a9a68a661bd54d91d9cf8c44046b6cfb6e484c23930075cc5f2` |
+| Hologram v4 Footer Fingerprint | `cbcb3a4a1794635b76c9130d118709e506f27bfcbeee52af5ad2cf624e9ee06e` |
+| Model Content Kappa (BLAKE3) | `blake3:34bfd82716c8c4f333d5a5012ff4482f8d42d7851c3f40a2a9d5626e2484000f` |
+| Application Kappa | `blake3:35f9660bafbb6276c0381712f253fe908518f6eb1e0efada6044aad0652087b9` |
+| Acceptance Attestation ID | `blake3:22b013af46849c8de4fe0cbda49e6fabbfc6bb8a2d951b2fb4f18d38bf09bbb5` |
 | Toolchain | PrismPM v0.3.0 / LexLean v0.3.0 / Language 1.1 / Lean 4.32.1 |
 | Entity Count | 23 (ISO-25010 / ISO-27005 / ISO-27034 / ISO-42010 profile) |
 | Lean Proofs | Zero sorry, proved by decide (`stdlibNoDanglingReferences`, `stdlibCrossFacetConsistency`) |

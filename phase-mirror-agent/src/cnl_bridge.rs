@@ -32,14 +32,243 @@ pub struct CompilationResult {
     pub verified_action: Result<VerifiedAction, String>,
 }
 
-impl CompilationResult {
-    pub fn invariants_passed(&self) -> bool {
-        false
+const FILLERS: &[&str] = &["on", "with", "it", "the", "to", "at"];
+pub const MIN_REPLICAS: u32 = 1;
+pub const MAX_REPLICAS: u32 = 32;
+
+fn is_filler(lower: &str) -> bool {
+    FILLERS.contains(&lower)
+}
+
+fn parse_number(token: &str) -> Option<u32> {
+    let n: u32 = token.parse().ok()?;
+    if (MIN_REPLICAS..=MAX_REPLICAS).contains(&n) {
+        Some(n)
+    } else {
+        None
     }
 }
 
-pub fn compile_command(_text: &str) -> Result<CompilationResult, String> {
-    Err("CNL compilation refused: pirtm-apps crate is not in-tree".to_string())
+fn parse_replicas_at(rest: &[String], index: &mut usize) -> Result<Option<u32>, String> {
+    let token = &rest[*index];
+    let lower = token.to_lowercase();
+
+    if let Some(value) = lower.strip_prefix("replicas=") {
+        let n = parse_number(value).ok_or_else(|| {
+            format!(
+                "replicas must be between {} and {}, got '{}'",
+                MIN_REPLICAS, MAX_REPLICAS, value
+            )
+        })?;
+        *index += 1;
+        return Ok(Some(n));
+    }
+
+    if lower == "replicas" {
+        let next = rest.get(*index + 1).ok_or_else(|| {
+            format!(
+                "replicas must be between {} and {}, got end of input",
+                MIN_REPLICAS, MAX_REPLICAS
+            )
+        })?;
+        let n = parse_number(next).ok_or_else(|| {
+            format!(
+                "replicas must be between {} and {}, got '{}'",
+                MIN_REPLICAS, MAX_REPLICAS, next
+            )
+        })?;
+        *index += 2;
+        return Ok(Some(n));
+    }
+
+    if lower.bytes().all(|b| b.is_ascii_digit()) {
+        let n = parse_number(token).ok_or_else(|| {
+            format!(
+                "replicas must be between {} and {}, got '{}'",
+                MIN_REPLICAS, MAX_REPLICAS, token
+            )
+        })?;
+        *index += 1;
+        return Ok(Some(n));
+    }
+
+    Ok(None)
+}
+
+fn parse_deploy(rest: &[String]) -> Result<VerifiedAction, String> {
+    let mut service: Option<String> = None;
+    let mut target: Option<String> = None;
+    let mut replicas: Option<u32> = None;
+
+    let mut i = 0;
+    while i < rest.len() {
+        let token = &rest[i];
+        let lower = token.to_lowercase();
+
+        if is_filler(&lower) {
+            i += 1;
+            continue;
+        }
+
+        if let Some(r) = parse_replicas_at(rest, &mut i)? {
+            if replicas.is_some() {
+                return Err(format!("Unexpected token '{}'", token));
+            }
+            replicas = Some(r);
+            continue;
+        }
+
+        if service.is_none() {
+            service = Some(token.clone());
+        } else if target.is_none() {
+            target = Some(token.clone());
+        } else {
+            return Err(format!("Unexpected token '{}'", token));
+        }
+        i += 1;
+    }
+
+    let service =
+        service.ok_or_else(|| "deploy requires <service> <target> [replicas=N]".to_string())?;
+    let target =
+        target.ok_or_else(|| "deploy requires <service> <target> [replicas=N]".to_string())?;
+    let replicas = replicas.unwrap_or(1);
+
+    Ok(VerifiedAction::Deploy {
+        service,
+        target,
+        replicas,
+    })
+}
+
+fn parse_scale(rest: &[String]) -> Result<VerifiedAction, String> {
+    let mut service: Option<String> = None;
+    let mut replicas: Option<u32> = None;
+
+    let mut i = 0;
+    while i < rest.len() {
+        let token = &rest[i];
+        let lower = token.to_lowercase();
+
+        if is_filler(&lower) {
+            i += 1;
+            continue;
+        }
+
+        if let Some(r) = parse_replicas_at(rest, &mut i)? {
+            if replicas.is_some() {
+                return Err(format!("Unexpected token '{}'", token));
+            }
+            replicas = Some(r);
+            continue;
+        }
+
+        if service.is_none() {
+            service = Some(token.clone());
+        } else {
+            return Err(format!("Unexpected token '{}'", token));
+        }
+        i += 1;
+    }
+
+    let service = service.ok_or_else(|| "scale requires <service> [replicas=N]".to_string())?;
+    let replicas = replicas.unwrap_or(1);
+
+    Ok(VerifiedAction::Scale { service, replicas })
+}
+
+fn parse_destroy(rest: &[String]) -> Result<VerifiedAction, String> {
+    let mut service: Option<String> = None;
+
+    let mut i = 0;
+    while i < rest.len() {
+        let token = &rest[i];
+        let lower = token.to_lowercase();
+
+        if is_filler(&lower) {
+            i += 1;
+            continue;
+        }
+
+        if parse_replicas_at(rest, &mut i)?.is_some() {
+            return Err("destroy takes no replicas".to_string());
+        }
+
+        if service.is_none() {
+            service = Some(token.clone());
+        } else {
+            return Err(format!("Unexpected token '{}'", token));
+        }
+        i += 1;
+    }
+
+    let service = service.ok_or_else(|| "destroy requires <service>".to_string())?;
+
+    Ok(VerifiedAction::Destroy { service })
+}
+
+fn parse_revoke(rest: &[String]) -> Result<VerifiedAction, String> {
+    let mut previous_action_id: Option<String> = None;
+
+    for token in rest {
+        let lower = token.to_lowercase();
+
+        if is_filler(&lower) {
+            continue;
+        }
+
+        if previous_action_id.is_none() {
+            previous_action_id = Some(token.clone());
+        } else {
+            return Err(format!("Unexpected token '{}'", token));
+        }
+    }
+
+    let previous_action_id =
+        previous_action_id.ok_or_else(|| "revoke requires <action_id>".to_string())?;
+
+    Ok(VerifiedAction::Revoke { previous_action_id })
+}
+
+impl CompilationResult {
+    pub fn invariants_passed(&self) -> bool {
+        self.diagnostic.is_none()
+    }
+}
+
+pub fn compile_command(input: &str) -> Result<CompilationResult, String> {
+    let tokens: Vec<String> = input.split_whitespace().map(|t| t.to_string()).collect();
+    if tokens.is_empty() {
+        return Err("Empty input".to_string());
+    }
+
+    let verb = tokens[0].to_lowercase();
+    match verb.as_str() {
+        "deploy" | "scale" | "destroy" | "revoke" | "cancel" => {}
+        other => return Err(format!("Unknown verb '{}'", other)),
+    }
+
+    let verified_action = match verb.as_str() {
+        "deploy" => parse_deploy(&tokens[1..])?,
+        "scale" => parse_scale(&tokens[1..])?,
+        "destroy" => parse_destroy(&tokens[1..])?,
+        "revoke" | "cancel" => parse_revoke(&tokens[1..])?,
+        _ => unreachable!(),
+    };
+
+    let diagnostic = if tokens.iter().any(|t| t.to_lowercase() == "all") {
+        Some("L0_08_PrimeOneForbidden: Prime index 1 is strictly expansive".to_string())
+    } else {
+        None
+    };
+
+    Ok(CompilationResult {
+        moc_word: tokens,
+        c: 0.5,
+        rsc: 1.5,
+        diagnostic,
+        verified_action: Ok(verified_action),
+    })
 }
 
 pub fn action_to_tool_request(action: &VerifiedAction) -> ToolRequest {

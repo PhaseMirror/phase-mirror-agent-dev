@@ -6,6 +6,7 @@ members = [
     "phase-mirror-gpt",
     "phase-mirror-surface",
     "crates/verification-harness",
+    "crates/lexlean-stratum",
 ]
 
 [workspace.package]

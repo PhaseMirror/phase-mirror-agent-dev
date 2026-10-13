@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 name: MCP Automation
+=======
+name: Phase Mirror MCP Automation
+>>>>>>> 0d2abf2 (Refactor CI workflows: update evolution.yml for master branch and add mcp-automation.yml for on-demand automation commands)
 
 on:
   workflow_dispatch:
     inputs:
       command:
+<<<<<<< HEAD
         description: Allowlisted command. Arbitrary cargo is refused.
         required: true
         type: choice
@@ -18,6 +23,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+=======
+        description: "Automation command to execute (e.g. test, build, validate, check-contract)"
+        required: true
+        default: "test"
+
+jobs:
+  mcp-automation:
+    name: Execute MCP Automation Command
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+>>>>>>> 0d2abf2 (Refactor CI workflows: update evolution.yml for master branch and add mcp-automation.yml for on-demand automation commands)
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
@@ -25,6 +43,7 @@ jobs:
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v2
 
+<<<<<<< HEAD
       - name: Run allowlisted command
         run: |
           case "${{ inputs.command }}" in
@@ -44,5 +63,30 @@ jobs:
             *)
               echo "refused: command is not allowlisted" >&2
               exit 1
+=======
+      - name: Execute Dispatch Command
+        run: |
+          set -euo pipefail
+          CMD="${{ github.event.inputs.command }}"
+          echo "Executing MCP automation command: $CMD"
+          case "$CMD" in
+            "build")
+              cargo build -p phase-mirror-mcp --release
+              ;;
+            "test")
+              cargo test -p phase-mirror-mcp
+              ;;
+            "validate")
+              cargo build -p phase-mirror-mcp --release
+              cargo test -p phase-mirror-mcp
+              cargo test -p lexlean-stratum
+              ;;
+            "check-contract")
+              cargo test -p phase-mirror-mcp --test runtime_harness
+              ;;
+            *)
+              echo "Executing custom cargo command on phase-mirror-mcp: cargo $CMD -p phase-mirror-mcp"
+              cargo $CMD -p phase-mirror-mcp
+>>>>>>> 0d2abf2 (Refactor CI workflows: update evolution.yml for master branch and add mcp-automation.yml for on-demand automation commands)
               ;;
           esac

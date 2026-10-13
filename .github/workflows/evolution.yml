@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 name: Phase Mirror CI
+=======
+name: Phase Mirror CI & MCP validation
+>>>>>>> 0d2abf2 (Refactor CI workflows: update evolution.yml for master branch and add mcp-automation.yml for on-demand automation commands)
 
 on:
   push:
@@ -8,10 +12,19 @@ on:
   workflow_dispatch:
 
 jobs:
+<<<<<<< HEAD
   verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+=======
+  workspace-ci:
+    name: Workspace Verification & MCP Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+>>>>>>> 0d2abf2 (Refactor CI workflows: update evolution.yml for master branch and add mcp-automation.yml for on-demand automation commands)
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
@@ -19,6 +32,7 @@ jobs:
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v2
 
+<<<<<<< HEAD
       - name: Check workspace
         run: cargo check --workspace
 
@@ -29,4 +43,16 @@ jobs:
         run: cargo build -p phase-mirror-mcp --release
 
       - name: Test MCP
+=======
+      - name: Check Workspace
+        run: cargo check --workspace
+
+      - name: Run Workspace Tests
+        run: cargo test --workspace
+
+      - name: Build Phase Mirror MCP Server (Release)
+        run: cargo build -p phase-mirror-mcp --release
+
+      - name: Run MCP Server Test Suite
+>>>>>>> 0d2abf2 (Refactor CI workflows: update evolution.yml for master branch and add mcp-automation.yml for on-demand automation commands)
         run: cargo test -p phase-mirror-mcp
